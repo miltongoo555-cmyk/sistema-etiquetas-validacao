@@ -1,31 +1,647 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sistema de Etiquetas</title>
-<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-<script src="https://cdn.tailwindcss.com"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Etiquetas de Validação</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
-<div id="root"></div>
-<script type="text/babel">
+    <div id="root"></div>
+    <script type="text/babel">
 const { useState, useEffect } = React;
-const Folder = ({className}) => React.createElement("svg", {className, fill:"none", stroke:"currentColor", viewBox:"0 0 24 24"}, React.createElement("path", {strokeLinecap:"round", strokeLinejoin:"round", strokeWidth:2, d:"M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"}));
-const Plus = ({className}) => React.createElement("svg", {className, fill:"none", stroke:"currentColor", viewBox:"0 0 24 24"}, React.createElement("path", {strokeLinecap:"round", strokeLinejoin:"round", strokeWidth:2, d:"M12 4v16m8-8H4"}));
-const Printer = ({className}) => React.createElement("svg", {className, fill:"none", stroke:"currentColor", viewBox:"0 0 24 24"}, React.createElement("path", {strokeLinecap:"round", strokeLinejoin:"round", strokeWidth:2, d:"M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"}));
-const ArrowLeft = ({className}) => React.createElement("svg", {className, fill:"none", stroke:"currentColor", viewBox:"0 0 24 24"}, React.createElement("path", {strokeLinecap:"round", strokeLinejoin:"round", strokeWidth:2, d:"M10 19l-7-7m0 0l7-7m-7 7h18"}));
-const Trash2 = ({className}) => React.createElement("svg", {className, fill:"none", stroke:"currentColor", viewBox:"0 0 24 24"}, React.createElement("path", {strokeLinecap:"round", strokeLinejoin:"round", strokeWidth:2, d:"M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"}));
-const LogOut = ({className}) => React.createElement("svg", {className, fill:"none", stroke:"currentColor", viewBox:"0 0 24 24"}, React.createElement("path", {strokeLinecap:"round", strokeLinejoin:"round", strokeWidth:2, d:"M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"}));
-const User = ({className}) => React.createElement("svg", {className, fill:"none", stroke:"currentColor", viewBox:"0 0 24 24"}, React.createElement("path", {strokeLinecap:"round", strokeLinejoin:"round", strokeWidth:2, d:"M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"}));
-const Wifi = ({className}) => React.createElement("svg", {className, fill:"none", stroke:"currentColor", viewBox:"0 0 24 24"}, React.createElement("path", {strokeLinecap:"round", strokeLinejoin:"round", strokeWidth:2, d:"M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0"}));
-const Maximize = ({className}) => React.createElement("svg", {className, fill:"none", stroke:"currentColor", viewBox:"0 0 24 24"}, React.createElement("path", {strokeLinecap:"round", strokeLinejoin:"round", strokeWidth:2, d:"M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"}));
 
-alert("Sistema carregado! Para usar a impressora Bluetooth, o site precisa estar em HTTPS (Vercel já usa HTTPS automaticamente).");
+// Ícones SVG
+const Folder = ({className}) => <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" /></svg>;
+const Plus = ({className}) => <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>;
+const Printer = ({className}) => <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" /></svg>;
+const ArrowLeft = ({className}) => <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>;
+const Trash2 = ({className}) => <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>;
+const LogOut = ({className}) => <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>;
+const User = ({className}) => <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>;
+const Wifi = ({className}) => <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0" /></svg>;
+const Maximize = ({className}) => <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" /></svg>;
+const Minimize = ({className}) => <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 9V4.5M9 9H4.5M9 9L3.75 3.75M9 15v4.5M9 15H4.5M9 15l-5.25 5.25M15 9h4.5M15 9V4.5M15 9l5.25-5.25M15 15h4.5M15 15v4.5m0-4.5l5.25 5.25" /></svg>;
 
-ReactDOM.render(React.createElement("div", {className:"min-h-screen bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center p-6"}, React.createElement("div", {className:"bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full text-center"}, React.createElement("h1", {className:"text-3xl font-bold text-gray-800 mb-4"}, "Sistema de Etiquetas"), React.createElement("p", {className:"text-gray-600 mb-8"}, "Aplicativo funcionando!"), React.createElement("p", {className:"text-sm text-gray-500"}, "O código completo será adicionado em breve."))), document.getElementById('root'));
-</script>
+function App() {
+  const [tela, setTela] = useState('login');
+  const [modoLogin, setModoLogin] = useState('login');
+  const [usuarioLogado, setUsuarioLogado] = useState(null);
+  const [pastas, setPastas] = useState([]);
+  const [pastaAtual, setPastaAtual] = useState(null);
+  const [mostrarModalPasta, setMostrarModalPasta] = useState(false);
+  const [nomePasta, setNomePasta] = useState('');
+  const [impressoraConectada, setImpressoraConectada] = useState(null);
+  const [statusImpressora, setStatusImpressora] = useState('offline');
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  
+  const [loginForm, setLoginForm] = useState({ restaurante: '', usuario: '', senha: '' });
+  const [cadastroForm, setCadastroForm] = useState({ restaurante: '', senha: '' });
+  const [formulario, setFormulario] = useState({ produto: '', diasValidade: '3', sif: '', pasta: '' });
+
+  useEffect(() => {
+    try {
+      const usuarioSalvo = localStorage.getItem('usuarioLogado');
+      if (usuarioSalvo) {
+        const usuario = JSON.parse(usuarioSalvo);
+        setUsuarioLogado(usuario);
+        carregarDados(usuario.restaurante);
+        setTela('home');
+      }
+    } catch (error) {
+      console.error('Erro:', error);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (usuarioLogado && pastas.length >= 0) {
+      salvarDados();
+    }
+  }, [pastas, usuarioLogado]);
+
+  const salvarDados = () => {
+    try {
+      if (usuarioLogado) {
+        localStorage.setItem(`dados_${usuarioLogado.restaurante}`, JSON.stringify(pastas));
+      }
+    } catch (error) {
+      console.error('Erro ao salvar:', error);
+    }
+  };
+
+  const carregarDados = (restaurante) => {
+    try {
+      const dados = localStorage.getItem(`dados_${restaurante}`);
+      if (dados) {
+        setPastas(JSON.parse(dados));
+      } else {
+        setPastas([]);
+      }
+    } catch (error) {
+      console.error('Erro ao carregar:', error);
+      setPastas([]);
+    }
+  };
+
+const fazerCadastro = () => {
+    if (!cadastroForm.restaurante || !cadastroForm.senha) {
+      alert('Preencha todos os campos');
+      return;
+    }
+    if (cadastroForm.restaurante.trim().length < 3) {
+      alert('Nome do restaurante deve ter pelo menos 3 caracteres');
+      return;
+    }
+    if (cadastroForm.senha.length < 4) {
+      alert('Senha deve ter pelo menos 4 caracteres');
+      return;
+    }
+    const chave = `restaurante_${cadastroForm.restaurante.trim()}`;
+    if (localStorage.getItem(chave)) {
+      alert('Este restaurante já está cadastrado!');
+      return;
+    }
+    localStorage.setItem(chave, cadastroForm.senha);
+    alert('Restaurante cadastrado com sucesso!');
+    setModoLogin('login');
+    setLoginForm({...loginForm, restaurante: cadastroForm.restaurante});
+    setCadastroForm({ restaurante: '', senha: '' });
+  };
+
+  const fazerLogin = () => {
+    if (!loginForm.restaurante || !loginForm.usuario || !loginForm.senha) {
+      alert('Preencha todos os campos');
+      return;
+    }
+    const chave = `restaurante_${loginForm.restaurante.trim()}`;
+    const senhaCorreta = localStorage.getItem(chave);
+    if (!senhaCorreta) {
+      alert('Restaurante não encontrado!');
+      return;
+    }
+    if (senhaCorreta !== loginForm.senha) {
+      alert('Senha incorreta!');
+      return;
+    }
+    const usuario = {
+      restaurante: loginForm.restaurante.trim(),
+      nome: loginForm.usuario.trim()
+    };
+    setUsuarioLogado(usuario);
+    localStorage.setItem('usuarioLogado', JSON.stringify(usuario));
+    carregarDados(usuario.restaurante);
+    setTela('home');
+    setLoginForm({ restaurante: '', usuario: '', senha: '' });
+  };
+
+  const fazerLogout = () => {
+    localStorage.removeItem('usuarioLogado');
+    setUsuarioLogado(null);
+    setPastas([]);
+    setPastaAtual(null);
+    setMostrarModalPasta(false);
+    setNomePasta('');
+    setImpressoraConectada(null);
+    setFormulario({ produto: '', diasValidade: '3', sif: '', pasta: '' });
+    setLoginForm({ restaurante: '', usuario: '', senha: '' });
+    setCadastroForm({ restaurante: '', senha: '' });
+    setModoLogin('login');
+    setTela('login');
+  };
+
+  const toggleFullscreen = () => {
+    const elem = document.documentElement;
+    if (!document.fullscreenElement) {
+      if (elem.requestFullscreen) {
+        elem.requestFullscreen();
+      } else if (elem.webkitRequestFullscreen) {
+        elem.webkitRequestFullscreen();
+      }
+      setIsFullscreen(true);
+    } else {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
+      }
+      setIsFullscreen(false);
+    }
+  };
+
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+    return () => {
+      document.removeEventListener('fullscreenchange', handleFullscreenChange);
+      document.removeEventListener('webkitfullscreenchange', handleFullscreenChange);
+    };
+  }, []);
+
+  const calcularDatasFrescas = (diasValidade) => {
+    const agora = new Date();
+    const ano = agora.getFullYear();
+    const mes = String(agora.getMonth() + 1).padStart(2, '0');
+    const dia = String(agora.getDate()).padStart(2, '0');
+    const dataFabricacao = `${ano}-${mes}-${dia}`;
+    const dataVal = new Date(agora.getFullYear(), agora.getMonth(), agora.getDate());
+    dataVal.setDate(dataVal.getDate() + parseInt(diasValidade));
+    const anoVal = dataVal.getFullYear();
+    const mesVal = String(dataVal.getMonth() + 1).padStart(2, '0');
+    const diaVal = String(dataVal.getDate()).padStart(2, '0');
+    const dataValidade = `${anoVal}-${mesVal}-${diaVal}`;
+    const hora = agora.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', hour12: false });
+    return { dataFabricacao, dataValidade, horaFabricacao: hora };
+  };
+
+  const formatarData = (data) => {
+    const [ano, mes, dia] = data.split('-');
+    return `${dia}/${mes}/${ano}`;
+  };
+
+  const adicionarPasta = () => {
+    if (nomePasta && nomePasta.trim()) {
+      const novaPasta = { id: Date.now(), nome: nomePasta.trim(), etiquetas: [] };
+      setPastas([...pastas, novaPasta].sort((a, b) => a.nome.localeCompare(b.nome)));
+      setNomePasta('');
+      setMostrarModalPasta(false);
+    } else {
+      alert('Por favor, digite o nome da pasta');
+    }
+  };
+
+  const adicionarEtiqueta = () => {
+    if (!formulario.produto || formulario.produto.trim() === '') {
+      alert('❌ Por favor, preencha o nome do produto');
+      return;
+    }
+    if (!formulario.pasta || formulario.pasta === '') {
+      alert('❌ Por favor, selecione uma pasta');
+      return;
+    }
+    try {
+      const novaEtiqueta = {
+        id: Date.now(),
+        produto: formulario.produto,
+        diasValidade: parseInt(formulario.diasValidade),
+        responsavel: usuarioLogado.nome,
+        sif: formulario.sif,
+      };
+      const novasPastas = pastas.map(pasta => {
+        if (pasta.id === parseInt(formulario.pasta)) {
+          return { ...pasta, etiquetas: [...pasta.etiquetas, novaEtiqueta] };
+        }
+        return pasta;
+      });
+      setPastas(novasPastas);
+      setFormulario({ produto: '', diasValidade: '3', sif: '', pasta: '' });
+      alert('✅ Etiqueta criada com sucesso!');
+      setTimeout(() => setTela('home'), 500);
+    } catch (error) {
+      alert('❌ Erro: ' + error.message);
+    }
+  };
+
+  const excluirEtiqueta = (pastaId, etiquetaId) => {
+    try {
+      const novasPastas = pastas.map(pasta => {
+        if (pasta.id === pastaId) {
+          return { ...pasta, etiquetas: pasta.etiquetas.filter(e => e.id !== etiquetaId) };
+        }
+        return pasta;
+      });
+      setPastas(novasPastas);
+      alert('✅ Etiqueta excluída!');
+    } catch (error) {
+      alert('❌ Erro ao excluir');
+    }
+  };
+
+  const excluirPasta = (pastaId) => {
+    if (window.confirm('Deseja excluir esta pasta?')) {
+      setPastas(pastas.filter(p => p.id !== pastaId));
+      if (pastaAtual === pastaId) {
+        setTela('home');
+        setPastaAtual(null);
+      }
+    }
+  };
+
+  const abrirModalImpressoras = async () => {
+    alert('Verificando Bluetooth...');
+    if (!navigator.bluetooth) {
+      alert('❌ Bluetooth não disponível. Use Chrome e HTTPS!');
+      return;
+    }
+    alert('✅ Abrindo seletor...');
+    try {
+      const device = await navigator.bluetooth.requestDevice({
+        acceptAllDevices: true,
+        optionalServices: [
+          '000018f0-0000-1000-8000-00805f9b34fb',
+          'e7810a71-73ae-499d-8c15-faa9aef0c3f2',
+          '00001101-0000-1000-8000-00805f9b34fb'
+        ]
+      });
+      alert('Dispositivo: ' + (device.name || 'Sem nome'));
+      setStatusImpressora('conectando');
+      const server = await device.gatt.connect();
+      device.addEventListener('gattserverdisconnected', () => {
+        setStatusImpressora('offline');
+        setImpressoraConectada(null);
+      });
+      setImpressoraConectada({
+        nome: device.name || 'BlueTooth Printer',
+        id: device.id,
+        device: device,
+        server: server
+      });
+      setStatusImpressora('online');
+      alert('✅ CONECTADO!');
+    } catch (error) {
+      setStatusImpressora('offline');
+      if (error.name !== 'NotFoundError') {
+        alert('❌ ERRO: ' + error.message);
+      }
+    }
+  };
+
+  const desconectarImpressora = () => {
+    if (impressoraConectada?.device?.gatt?.connected) {
+      impressoraConectada.device.gatt.disconnect();
+    }
+    setImpressoraConectada(null);
+    setStatusImpressora('offline');
+    alert('Desconectado!');
+  };
+
+  const imprimirEtiqueta = async (etiqueta) => {
+    const { dataFabricacao, dataValidade, horaFabricacao } = calcularDatasFrescas(etiqueta.diasValidade);
+    const etiquetaAtualizada = { ...etiqueta, dataFabricacao, dataValidade, horaFabricacao };
+    if (impressoraConectada && statusImpressora === 'online') {
+      await imprimirViaBluetooth(etiquetaAtualizada);
+    } else {
+      imprimirViaWeb(etiquetaAtualizada);
+    }
+  };
+
+  const imprimirViaBluetooth = async (etiqueta) => {
+    try {
+      if (!impressoraConectada?.device) {
+        imprimirViaWeb(etiqueta);
+        return;
+      }
+      const server = impressoraConectada.server;
+      let service;
+      try {
+        service = await server.getPrimaryService('000018f0-0000-1000-8000-00805f9b34fb');
+      } catch {
+        service = await server.getPrimaryService('e7810a71-73ae-499d-8c15-faa9aef0c3f2');
+      }
+      const characteristic = await service.getCharacteristics();
+      const writeChar = characteristic.find(c => c.properties.write || c.properties.writeWithoutResponse);
+      if (!writeChar) throw new Error('Não encontrado');
+      const encoder = new TextEncoder();
+      let cmd = '\x1B\x40\x1B\x61\x01\x1B\x21\x30' + etiqueta.produto + '\n\n\x1B\x21\x00\x1B\x61\x00';
+      cmd += 'Fab: ' + formatarData(etiqueta.dataFabricacao) + ' ' + etiqueta.horaFabricacao + '\n';
+      cmd += 'Val: ' + formatarData(etiqueta.dataValidade) + '\n';
+      cmd += 'Resp: ' + etiqueta.responsavel + '\n';
+      if (etiqueta.sif) cmd += 'SIF: ' + etiqueta.sif + '\n';
+      cmd += '\n\n\x1D\x56\x00';
+      await writeChar.writeValue(encoder.encode(cmd));
+      alert('✓ Enviado!');
+    } catch (error) {
+      setStatusImpressora('offline');
+      imprimirViaWeb(etiqueta);
+    }
+  };
+
+  const imprimirViaWeb = (etiqueta) => {
+    const w = window.open('', '', 'width=800,height=600');
+    w.document.write(`<html><head><title>Etiqueta</title><style>@page{size:50mm 30mm;margin:0}body{margin:0;padding:2mm;font-family:Arial;width:50mm;height:30mm}.etiqueta{border:2px solid black;padding:2mm;width:100%;height:100%}h1{text-align:center;font-size:12px;margin:0 0 2mm 0;border-bottom:1px solid black;padding-bottom:1mm}p{font-size:8px;margin:0.5mm 0;line-height:1.2}</style></head><body><div class="etiqueta"><h1>${etiqueta.produto}</h1><p><strong>Fab:</strong> ${formatarData(etiqueta.dataFabricacao)} ${etiqueta.horaFabricacao}</p><p><strong>Val:</strong> ${formatarData(etiqueta.dataValidade)}</p><p><strong>Resp:</strong> ${etiqueta.responsavel}</p>${etiqueta.sif ? `<p><strong>SIF:</strong> ${etiqueta.sif}</p>` : ''}</div></body></html>`);
+    w.document.close();
+    setTimeout(() => { w.print(); w.close(); }, 250);
+  };
+
+  // Renderização da Interface
+  if (tela === 'login') {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center p-6">
+        <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full">
+          <h1 className="text-3xl font-bold text-center text-gray-800 mb-8">Sistema de Etiquetas</h1>
+          {modoLogin === 'login' ? (
+            <div>
+              <h2 className="text-xl font-semibold text-gray-700 mb-4">Login</h2>
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Nome do Restaurante</label>
+                  <input type="text" value={loginForm.restaurante} onChange={(e) => setLoginForm({...loginForm, restaurante: e.target.value})} className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none" placeholder="Ex: Restaurante Sabor" />
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Seu Nome</label>
+                  <input type="text" value={loginForm.usuario} onChange={(e) => setLoginForm({...loginForm, usuario: e.target.value})} className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none" placeholder="Ex: João Silva" />
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Senha</label>
+                  <input type="password" value={loginForm.senha} onChange={(e) => setLoginForm({...loginForm, senha: e.target.value})} onKeyPress={(e) => e.key === 'Enter' && fazerLogin()} className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none" placeholder="••••••••" />
+                </div>
+                <button onClick={fazerLogin} className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg">Entrar</button>
+              </div>
+              <p className="text-center text-gray-600 mt-6">Não tem conta? <button onClick={() => setModoLogin('cadastro')} className="text-blue-600 font-semibold hover:underline">Cadastrar Restaurante</button></p>
+            </div>
+          ) : (
+            <div>
+              <h2 className="text-xl font-semibold text-gray-700 mb-4">Cadastrar Restaurante</h2>
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Nome do Restaurante</label>
+                  <input type="text" value={cadastroForm.restaurante} onChange={(e) => setCadastroForm({...cadastroForm, restaurante: e.target.value})} className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none" placeholder="Ex: Restaurante Sabor" />
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Senha</label>
+                  <input type="password" value={cadastroForm.senha} onChange={(e) => setCadastroForm({...cadastroForm, senha: e.target.value})} onKeyPress={(e) => e.key === 'Enter' && fazerCadastro()} className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none" placeholder="••••••••" />
+                </div>
+                <button onClick={fazerCadastro} className="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 rounded-lg">Cadastrar</button>
+              </div>
+              <p className="text-center text-gray-600 mt-6">Já tem conta? <button onClick={() => setModoLogin('login')} className="text-purple-600 font-semibold hover:underline">Fazer Login</button></p>
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  if (tela === 'home') {
+    return (
+      <div className="min-h-screen bg-gray-100 p-6">
+        <div className="max-w-4xl mx-auto">
+          <div className="fixed top-4 left-4 z-50">
+            <button onClick={toggleFullscreen} className="bg-gray-800 hover:bg-gray-900 text-white p-3 rounded-lg shadow-lg">
+              {isFullscreen ? <Minimize className="w-6 h-6" /> : <Maximize className="w-6 h-6" />}
+            </button>
+          </div>
+          <div className="fixed bottom-6 right-6 z-50">
+            <div className={`rounded-lg shadow-2xl p-4 ${statusImpressora === 'online' ? 'bg-green-600' : statusImpressora === 'conectando' ? 'bg-yellow-600' : 'bg-red-600'}`}>
+              <div className="flex items-center gap-3 text-white">
+                <div className={`w-4 h-4 rounded-full ${statusImpressora === 'online' ? 'bg-white animate-pulse' : statusImpressora === 'conectando' ? 'bg-white animate-ping' : 'bg-white opacity-50'}`}></div>
+                <div className="text-base font-bold">{statusImpressora === 'online' && 'ONLINE'}{statusImpressora === 'conectando' && 'CONECTANDO'}{statusImpressora === 'offline' && 'OFFLINE'}</div>
+              </div>
+              {impressoraConectada && <div className="text-sm text-white mt-2 pl-7 font-medium">📱 {impressoraConectada.nome}</div>}
+            </div>
+          </div>
+          <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+            <div className="flex justify-between items-center mb-4">
+              <div>
+                <h1 className="text-3xl font-bold text-gray-800">Etiquetas de Validação</h1>
+                <p className="text-gray-600 mt-1"><User className="w-4 h-4 inline mr-1" />{usuarioLogado?.nome} - {usuarioLogado?.restaurante}</p>
+              </div>
+              <div className="flex gap-2 flex-wrap">
+                <button onClick={abrirModalImpressoras} className="bg-blue-600 active:bg-blue-800 text-white font-bold py-3 px-5 rounded flex items-center gap-2"><Wifi className="w-5 h-5" />{impressoraConectada ? 'TROCAR' : 'CONECTAR'}</button>
+                {impressoraConectada && <button onClick={desconectarImpressora} className="bg-orange-600 active:bg-orange-800 text-white font-bold py-3 px-5 rounded flex items-center gap-2"><Wifi className="w-5 h-5" />Desconectar</button>}
+                <button onClick={fazerLogout} className="bg-red-600 active:bg-red-800 text-white font-bold py-3 px-5 rounded flex items-center gap-2"><LogOut className="w-5 h-5" />Sair</button>
+              </div>
+            </div>
+            <div className="flex gap-3 flex-wrap">
+              <button onClick={() => setMostrarModalPasta(true)} className="bg-blue-600 active:bg-blue-800 text-white font-semibold py-3 px-5 rounded flex items-center gap-2"><Plus className="w-5 h-5" />Nova Pasta</button>
+              <button onClick={() => setTela('criar')} className="bg-green-600 active:bg-green-800 text-white font-semibold py-3 px-5 rounded flex items-center gap-2"><Plus className="w-5 h-5" />Criar Etiqueta</button>
+            </div>
+          </div>
+          {mostrarModalPasta && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+              <div className="bg-white rounded-lg shadow-xl p-6 max-w-md w-full mx-4">
+                <h2 className="text-2xl font-bold text-gray-800 mb-4">Nova Pasta</h2>
+                <input type="text" value={nomePasta} onChange={(e) => setNomePasta(e.target.value)} onKeyPress={(e) => e.key === 'Enter' && adicionarPasta()} className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none mb-4" placeholder="Nome da pasta" autoFocus />
+                <div className="flex gap-3">
+                  <button onClick={() => { setMostrarModalPasta(false); setNomePasta(''); }} className="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded">Cancelar</button>
+                  <button onClick={adicionarPasta} className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded">Criar</button>
+                </div>
+              </div>
+            </div>
+          )}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {pastas.map(pasta => (
+              <div key={pasta.id} className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow cursor-pointer relative">
+                <button onClick={(e) => { e.stopPropagation(); excluirPasta(pasta.id); }} className="absolute top-2 right-2 text-red-500 hover:text-red-700"><Trash2 className="w-4 h-4" /></button>
+                <div onClick={() => { setPastaAtual(pasta.id); setTela('pasta'); }}>
+                  <Folder className="w-16 h-16 text-yellow-500 mb-3" />
+                  <h2 className="text-xl font-bold text-gray-800">{pasta.nome}</h2>
+                  <p className="text-gray-600 text-sm mt-2">{pasta.etiquetas.length} {pasta.etiquetas.length === 1 ? 'etiqueta' : 'etiquetas'}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+          {pastas.length === 0 && (
+            <div className="text-center py-12 text-gray-500">
+              <Folder className="w-16 h-16 mx-auto mb-4 opacity-50" />
+              <p className="text-lg">Nenhuma pasta criada ainda</p>
+              <p className="text-sm">Clique em "Nova Pasta" para começar</p>
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+ if (tela === 'pasta') {
+    const pasta = pastas.find(p => p.id === pastaAtual);
+    if (!pasta) { setTela('home'); return null; }
+    return (
+      <div className="min-h-screen bg-gray-100 p-6">
+        <div className="max-w-4xl mx-auto">
+          <div className="fixed top-4 left-4 z-50">
+            <button onClick={toggleFullscreen} className="bg-gray-800 hover:bg-gray-900 text-white p-3 rounded-lg shadow-lg">
+              {isFullscreen ? <Minimize className="w-6 h-6" /> : <Maximize className="w-6 h-6" />}
+            </button>
+          </div>
+          <div className="fixed bottom-6 right-6 z-50">
+            <div className={`rounded-lg shadow-2xl p-4 ${statusImpressora === 'online' ? 'bg-green-600' : statusImpressora === 'conectando' ? 'bg-yellow-600' : 'bg-red-600'}`}>
+              <div className="flex items-center gap-3 text-white">
+                <div className={`w-4 h-4 rounded-full ${statusImpressora === 'online' ? 'bg-white animate-pulse' : statusImpressora === 'conectando' ? 'bg-white animate-ping' : 'bg-white opacity-50'}`}></div>
+                <div className="text-base font-bold">{statusImpressora === 'online' && 'ONLINE'}{statusImpressora === 'conectando' && 'CONECTANDO'}{statusImpressora === 'offline' && 'OFFLINE'}</div>
+              </div>
+              {impressoraConectada && <div className="text-sm text-white mt-2 pl-7 font-medium">📱 {impressoraConectada.nome}</div>}
+            </div>
+          </div>
+          <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+            <div className="flex items-center gap-4 mb-4">
+              <button onClick={() => { setTela('home'); setPastaAtual(null); }} className="bg-gray-200 hover:bg-gray-300 p-2 rounded-lg">
+                <ArrowLeft className="w-6 h-6" />
+              </button>
+              <div>
+                <h1 className="text-3xl font-bold text-gray-800">{pasta.nome}</h1>
+                <p className="text-gray-500 text-sm">{pasta.etiquetas.length} {pasta.etiquetas.length === 1 ? 'etiqueta' : 'etiquetas'}</p>
+              </div>
+            </div>
+            <button onClick={() => setTela('criar')} className="bg-green-600 active:bg-green-800 text-white font-semibold py-3 px-5 rounded flex items-center gap-2">
+              <Plus className="w-5 h-5" />Criar Etiqueta
+            </button>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {pasta.etiquetas.map(etiqueta => {
+              const { dataFabricacao, dataValidade, horaFabricacao } = calcularDatasFrescas(etiqueta.diasValidade);
+              return (
+                <div key={etiqueta.id} className="bg-white rounded-lg shadow-md p-5 relative">
+                  <button onClick={() => excluirEtiqueta(pasta.id, etiqueta.id)} className="absolute top-3 right-3 text-red-400 hover:text-red-600">
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                  <h2 className="text-xl font-bold text-gray-800 mb-3 pr-6">{etiqueta.produto}</h2>
+                  <div className="text-sm text-gray-600 space-y-1 mb-4">
+                    <p><span className="font-semibold">Fab:</span> {formatarData(dataFabricacao)} {horaFabricacao}</p>
+                    <p><span className="font-semibold">Val:</span> {formatarData(dataValidade)} <span className="text-gray-400">({etiqueta.diasValidade}d)</span></p>
+                    <p><span className="font-semibold">Resp:</span> {etiqueta.responsavel}</p>
+                    {etiqueta.sif && <p><span className="font-semibold">SIF:</span> {etiqueta.sif}</p>}
+                  </div>
+                  <button onClick={() => imprimirEtiqueta(etiqueta)} className="w-full bg-blue-600 active:bg-blue-800 text-white font-bold py-3 rounded flex items-center justify-center gap-2">
+                    <Printer className="w-5 h-5" />Imprimir Agora
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+          {pasta.etiquetas.length === 0 && (
+            <div className="text-center py-12 text-gray-500">
+              <Printer className="w-16 h-16 mx-auto mb-4 opacity-50" />
+              <p className="text-lg">Nenhuma etiqueta nesta pasta</p>
+              <p className="text-sm">Clique em "Criar Etiqueta" para adicionar</p>
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  if (tela === 'criar') {
+    return (
+      <div className="min-h-screen bg-gray-100 p-6">
+        <div className="max-w-lg mx-auto">
+          <div className="bg-white rounded-lg shadow-md p-6">
+            <div className="flex items-center gap-4 mb-6">
+              <button onClick={() => setTela(pastaAtual ? 'pasta' : 'home')} className="bg-gray-200 hover:bg-gray-300 p-2 rounded-lg">
+                <ArrowLeft className="w-6 h-6" />
+              </button>
+              <h1 className="text-2xl font-bold text-gray-800">Criar Etiqueta</h1>
+            </div>
+            <div className="space-y-5">
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Produto *</label>
+                <input
+                  type="text"
+                  value={formulario.produto}
+                  onChange={(e) => setFormulario({...formulario, produto: e.target.value})}
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-green-500 focus:outline-none text-lg"
+                  placeholder="Ex: Molho de Tomate"
+                  autoFocus
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Validade (dias) *</label>
+                <input
+                  type="number"
+                  value={formulario.diasValidade}
+                  onChange={(e) => setFormulario({...formulario, diasValidade: e.target.value})}
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-green-500 focus:outline-none text-lg"
+                  min="1"
+                  max="365"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Pasta *</label>
+                <select
+                  value={formulario.pasta}
+                  onChange={(e) => setFormulario({...formulario, pasta: e.target.value})}
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-green-500 focus:outline-none text-lg bg-white"
+                >
+                  <option value="">Selecione uma pasta...</option>
+                  {pastas.map(p => (
+                    <option key={p.id} value={p.id}>{p.nome}</option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">SIF (opcional)</label>
+                <input
+                  type="text"
+                  value={formulario.sif}
+                  onChange={(e) => setFormulario({...formulario, sif: e.target.value})}
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-green-500 focus:outline-none text-lg"
+                  placeholder="Número do SIF"
+                />
+              </div>
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-sm text-blue-700">
+                <p className="font-semibold mb-1">ℹ️ Sobre as datas</p>
+                <p>A data de fabricação e validade são calculadas automaticamente no momento da impressão, sempre com a hora atual.</p>
+              </div>
+              <div className="flex gap-3 pt-2">
+                <button
+                  onClick={() => setTela(pastaAtual ? 'pasta' : 'home')}
+                  className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-3 rounded-lg"
+                >
+                  Cancelar
+                </button>
+                <button
+                  onClick={adicionarEtiqueta}
+                  className="flex-1 bg-green-600 active:bg-green-800 text-white font-bold py-3 rounded-lg flex items-center justify-center gap-2"
+                >
+                  <Plus className="w-5 h-5" />Salvar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return null;
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);
+    </script>
 </body>
 </html>
