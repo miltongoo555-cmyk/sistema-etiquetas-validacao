@@ -285,7 +285,10 @@ const fazerCadastro = () => {
         optionalServices: [
           '000018f0-0000-1000-8000-00805f9b34fb',
           'e7810a71-73ae-499d-8c15-faa9aef0c3f2',
-          '00001101-0000-1000-8000-00805f9b34fb'
+          '49535343-fe7d-4ae5-8fa9-9fafd205e455',
+          '00001101-0000-1000-8000-00805f9b34fb',
+          '0000ff00-0000-1000-8000-00805f9b34fb',
+          '0000ffe0-0000-1000-8000-00805f9b34fb'
         ]
       });
       alert('Dispositivo: ' + (device.name || 'Sem nome'));
@@ -336,26 +339,74 @@ const fazerCadastro = () => {
         imprimirViaWeb(etiqueta);
         return;
       }
-      const server = impressoraConectada.server;
-      let service;
-      try {
-        service = await server.getPrimaryService('000018f0-0000-1000-8000-00805f9b34fb');
-      } catch {
-        service = await server.getPrimaryService('e7810a71-73ae-499d-8c15-faa9aef0c3f2');
+
+      // Reconecta se necessário
+      let server = impressoraConectada.server;
+      if (!impressoraConectada.device.gatt.connected) {
+        server = await impressoraConectada.device.gatt.connect();
       }
-      const characteristic = await service.getCharacteristics();
-      const writeChar = characteristic.find(c => c.properties.write || c.properties.writeWithoutResponse);
-      if (!writeChar) throw new Error('Não encontrado');
-      const encoder = new TextEncoder();
-      let cmd = '\x1B\x40\x1B\x61\x01\x1B\x21\x30' + etiqueta.produto + '\n\n\x1B\x21\x00\x1B\x61\x00';
+
+      // Descobre todos os serviços disponíveis
+      const services = await server.getPrimaryServices();
+      let writeChar = null;
+
+      for (const service of services) {
+        try {
+          const chars = await service.getCharacteristics();
+          for (const char of chars) {
+            if (char.properties.write || char.properties.writeWithoutResponse) {
+              writeChar = char;
+              break;
+            }
+          }
+          if (writeChar) break;
+        } catch (e) {}
+      }
+
+      if (!writeChar) {
+        alert('❌ Característica de escrita não encontrada');
+        imprimirViaWeb(etiqueta);
+        return;
+      }
+
+      // Monta o comando ESC/POS
+      const ESC = '\x1B';
+      const GS  = '\x1D';
+      let cmd = '';
+      cmd += ESC + '@';                    // Reset
+      cmd += ESC + 'a' + '\x01';          // Centralizar
+      cmd += ESC + '!' + '\x30';          // Fonte grande
+      cmd += etiqueta.produto + '\n';
+      cmd += ESC + '!' + '\x00';          // Fonte normal
+      cmd += ESC + 'a' + '\x00';          // Alinhar esquerda
+      cmd += '------------------------\n';
       cmd += 'Fab: ' + formatarData(etiqueta.dataFabricacao) + ' ' + etiqueta.horaFabricacao + '\n';
       cmd += 'Val: ' + formatarData(etiqueta.dataValidade) + '\n';
       cmd += 'Resp: ' + etiqueta.responsavel + '\n';
       if (etiqueta.sif) cmd += 'SIF: ' + etiqueta.sif + '\n';
-      cmd += '\n\n\x1D\x56\x00';
-      await writeChar.writeValue(encoder.encode(cmd));
-      alert('✓ Enviado!');
+      cmd += '\n\n\n';
+      cmd += GS + 'V' + '\x00';           // Cortar papel
+
+      // Converte para bytes
+      const encoder = new TextEncoder();
+      const data = encoder.encode(cmd);
+
+      // Envia em chunks de 20 bytes
+      const CHUNK_SIZE = 20;
+      for (let i = 0; i < data.length; i += CHUNK_SIZE) {
+        const chunk = data.slice(i, i + CHUNK_SIZE);
+        if (writeChar.properties.writeWithoutResponse) {
+          await writeChar.writeValueWithoutResponse(chunk);
+        } else {
+          await writeChar.writeValue(chunk);
+        }
+        // Pequena pausa entre chunks
+        await new Promise(r => setTimeout(r, 30));
+      }
+
+      alert('✅ Impressão enviada!');
     } catch (error) {
+      alert('❌ Erro: ' + error.message);
       setStatusImpressora('offline');
       imprimirViaWeb(etiqueta);
     }
