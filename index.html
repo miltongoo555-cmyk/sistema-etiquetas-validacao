@@ -323,6 +323,63 @@ const fazerCadastro = () => {
     alert('Desconectado!');
   };
 
+  const diagnosticarImpressora = async () => {
+    try {
+      let server = impressoraConectada.server;
+      if (!impressoraConectada.device.gatt.connected) {
+        server = await impressoraConectada.device.gatt.connect();
+      }
+
+      const services = await server.getPrimaryServices();
+      let relatorio = `📋 DIAGNÓSTICO\n\nServiços encontrados: ${services.length}\n\n`;
+
+      for (const service of services) {
+        relatorio += `🔷 Serviço:\n${service.uuid}\n`;
+        try {
+          const chars = await service.getCharacteristics();
+          for (const char of chars) {
+            const props = [];
+            if (char.properties.read) props.push('READ');
+            if (char.properties.write) props.push('WRITE');
+            if (char.properties.writeWithoutResponse) props.push('WRITE_WR');
+            if (char.properties.notify) props.push('NOTIFY');
+            relatorio += `  ➡ ${char.uuid}\n     [${props.join(', ')}]\n`;
+          }
+        } catch (e) {
+          relatorio += `  ⚠ Erro: ${e.message}\n`;
+        }
+        relatorio += '\n';
+      }
+
+      // Tenta enviar bytes mínimos de teste
+      relatorio += '🖨 Teste de envio...\n';
+      try {
+        const services2 = await server.getPrimaryServices();
+        for (const service of services2) {
+          const chars = await service.getCharacteristics();
+          for (const char of chars) {
+            if (char.properties.write || char.properties.writeWithoutResponse) {
+              const testBytes = new Uint8Array([0x1B, 0x40, 0x41, 0x0A]); // ESC @ A \n
+              if (char.properties.writeWithoutResponse) {
+                await char.writeValueWithoutResponse(testBytes);
+              } else {
+                await char.writeValue(testBytes);
+              }
+              relatorio += `✅ Enviado via: ${char.uuid}`;
+              break;
+            }
+          }
+        }
+      } catch (e) {
+        relatorio += `❌ Falha no envio: ${e.message}`;
+      }
+
+      alert(relatorio);
+    } catch (e) {
+      alert('❌ Erro geral: ' + e.message);
+    }
+  };
+    
   const imprimirEtiqueta = async (etiqueta) => {
     const { dataFabricacao, dataValidade, horaFabricacao } = calcularDatasFrescas(etiqueta.diasValidade);
     const etiquetaAtualizada = { ...etiqueta, dataFabricacao, dataValidade, horaFabricacao };
@@ -494,6 +551,7 @@ const fazerCadastro = () => {
               <div className="flex gap-2 flex-wrap">
                 <button onClick={abrirModalImpressoras} className="bg-blue-600 active:bg-blue-800 text-white font-bold py-3 px-5 rounded flex items-center gap-2"><Wifi className="w-5 h-5" />{impressoraConectada ? 'TROCAR' : 'CONECTAR'}</button>
                 {impressoraConectada && <button onClick={desconectarImpressora} className="bg-orange-600 active:bg-orange-800 text-white font-bold py-3 px-5 rounded flex items-center gap-2"><Wifi className="w-5 h-5" />Desconectar</button>}
+                {impressoraConectada && (<button onClick={diagnosticarImpressora} className="bg-yellow-600 active:bg-yellow-800 text-white font-bold py-3 px-5 rounded flex items-center gap-2">🔍 Diagnosticar</button>)}
                 <button onClick={fazerLogout} className="bg-red-600 active:bg-red-800 text-white font-bold py-3 px-5 rounded flex items-center gap-2"><LogOut className="w-5 h-5" />Sair</button>
               </div>
             </div>
