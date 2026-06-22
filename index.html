@@ -84,7 +84,7 @@ useEffect(() => {
       setPastas([]);
     }
   };
-const fazerCadastro = () => {
+  const fazerCadastro = () => {
     if (!cadastroForm.restaurante || !cadastroForm.senha) {
       alert('Preencha todos os campos');
       return;
@@ -149,7 +149,7 @@ const fazerCadastro = () => {
     setModoLogin('login');
     setTela('login');
   };
-const toggleFullscreen = () => {
+  const toggleFullscreen = () => {
     const elem = document.documentElement;
     if (!document.fullscreenElement) {
       if (elem.requestFullscreen) {
@@ -200,7 +200,7 @@ const toggleFullscreen = () => {
     const [ano, mes, dia] = data.split('-');
     return `${dia}/${mes}/${ano}`;
   };
-const adicionarPasta = () => {
+  const adicionarPasta = () => {
     if (nomePasta && nomePasta.trim()) {
       const novaPasta = { id: Date.now(), nome: nomePasta.trim(), etiquetas: [] };
       setPastas([...pastas, novaPasta].sort((a, b) => a.nome.localeCompare(b.nome)));
@@ -267,7 +267,7 @@ const adicionarPasta = () => {
       }
     }
   };
-const abrirModalImpressoras = async () => {
+  const abrirModalImpressoras = async () => {
     alert('Verificando Bluetooth...');
     if (!navigator.bluetooth) {
       alert('❌ Bluetooth não disponível. Use Chrome e HTTPS!');
