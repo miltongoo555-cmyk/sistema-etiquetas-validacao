@@ -8,25 +8,28 @@
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.5} }
+        @keyframes ping { 75%,100%{transform:scale(2);opacity:0} }
+        .animate-pulse { animation: pulse 2s cubic-bezier(.4,0,.6,1) infinite }
+        .animate-ping { animation: ping 1s cubic-bezier(0,0,.2,1) infinite }
+    </style>
 </head>
 <body>
-    <div id="root"></div>
-    <script type="text/babel">
-
-
+<div id="root"></div>
+<script type="text/babel">
 const { useState, useEffect } = React;
 
-// Ícones SVG
-const Folder = ({className}) => <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" /></svg>;
-const Plus = ({className}) => <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>;
-const Printer = ({className}) => <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" /></svg>;
-const ArrowLeft = ({className}) => <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>;
-const Trash2 = ({className}) => <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>;
-const LogOut = ({className}) => <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>;
-const User = ({className}) => <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>;
-const Wifi = ({className}) => <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0" /></svg>;
-const Maximize = ({className}) => <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" /></svg>;
-const Minimize = ({className}) => <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 9V4.5M9 9H4.5M9 9L3.75 3.75M9 15v4.5M9 15H4.5M9 15l-5.25 5.25M15 9h4.5M15 9V4.5M15 9l5.25-5.25M15 15h4.5M15 15v4.5m0-4.5l5.25 5.25" /></svg>;
+const Folder = ({className}) => <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>;
+const Plus = ({className}) => <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4"/></svg>;
+const Printer = ({className}) => <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>;
+const ArrowLeft = ({className}) => <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>;
+const Trash2 = ({className}) => <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>;
+const LogOut = ({className}) => <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>;
+const User = ({className}) => <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>;
+const Wifi = ({className}) => <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0"/></svg>;
+const Maximize = ({className}) => <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/></svg>;
+const Minimize = ({className}) => <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 9V4.5M9 9H4.5M9 9L3.75 3.75M9 15v4.5M9 15H4.5M9 15l-5.25 5.25M15 9h4.5M15 9V4.5M15 9l5.25-5.25M15 15h4.5M15 15v4.5m0-4.5l5.25 5.25"/></svg>;
 
 function App() {
   const [tela, setTela] = useState('login');
@@ -39,104 +42,64 @@ function App() {
   const [impressoraConectada, setImpressoraConectada] = useState(null);
   const [statusImpressora, setStatusImpressora] = useState('offline');
   const [isFullscreen, setIsFullscreen] = useState(false);
-  
   const [loginForm, setLoginForm] = useState({ restaurante: '', usuario: '', senha: '' });
   const [cadastroForm, setCadastroForm] = useState({ restaurante: '', senha: '' });
   const [formulario, setFormulario] = useState({ produto: '', diasValidade: '3', sif: '', pasta: '' });
 
-
-useEffect(() => {
+  useEffect(() => {
     try {
-      const usuarioSalvo = localStorage.getItem('usuarioLogado');
-      if (usuarioSalvo) {
-        const usuario = JSON.parse(usuarioSalvo);
-        setUsuarioLogado(usuario);
-        carregarDados(usuario.restaurante);
+      const s = localStorage.getItem('usuarioLogado');
+      if (s) {
+        const u = JSON.parse(s);
+        setUsuarioLogado(u);
+        carregarDados(u.restaurante);
         setTela('home');
       }
-    } catch (error) {
-      console.error('Erro:', error);
-    }
+    } catch(e) { console.error(e); }
   }, []);
 
   useEffect(() => {
-    if (usuarioLogado && pastas.length >= 0) {
-      salvarDados();
-    }
-  }, [pastas, usuarioLogado]);
+    if (usuarioLogado) salvarDados();
+  }, [pastas]);
 
   const salvarDados = () => {
     try {
       if (usuarioLogado) {
-        localStorage.setItem(`dados_${usuarioLogado.restaurante}`, JSON.stringify(pastas));
+        localStorage.setItem('dados_' + usuarioLogado.restaurante, JSON.stringify(pastas));
       }
-    } catch (error) {
-      console.error('Erro ao salvar:', error);
-    }
+    } catch(e) { console.error(e); }
   };
 
-  const carregarDados = (restaurante) => {
+  const carregarDados = (r) => {
     try {
-      const dados = localStorage.getItem(`dados_${restaurante}`);
-      if (dados) {
-        setPastas(JSON.parse(dados));
-      } else {
-        setPastas([]);
-      }
-    } catch (error) {
-      console.error('Erro ao carregar:', error);
-      setPastas([]);
-    }
+      const d = localStorage.getItem('dados_' + r);
+      setPastas(d ? JSON.parse(d) : []);
+    } catch(e) { setPastas([]); }
   };
 
-
-const fazerCadastro = () => {
-    if (!cadastroForm.restaurante || !cadastroForm.senha) {
-      alert('Preencha todos os campos');
-      return;
-    }
-    if (cadastroForm.restaurante.trim().length < 3) {
-      alert('Nome do restaurante deve ter pelo menos 3 caracteres');
-      return;
-    }
-    if (cadastroForm.senha.length < 4) {
-      alert('Senha deve ter pelo menos 4 caracteres');
-      return;
-    }
-    const chave = `restaurante_${cadastroForm.restaurante.trim()}`;
-    if (localStorage.getItem(chave)) {
-      alert('Este restaurante já está cadastrado!');
-      return;
-    }
+  const fazerCadastro = () => {
+    if (!cadastroForm.restaurante || !cadastroForm.senha) { alert('Preencha todos os campos'); return; }
+    if (cadastroForm.restaurante.trim().length < 3) { alert('Nome deve ter pelo menos 3 caracteres'); return; }
+    if (cadastroForm.senha.length < 4) { alert('Senha deve ter pelo menos 4 caracteres'); return; }
+    const chave = 'restaurante_' + cadastroForm.restaurante.trim();
+    if (localStorage.getItem(chave)) { alert('Restaurante já cadastrado!'); return; }
     localStorage.setItem(chave, cadastroForm.senha);
-    alert('Restaurante cadastrado com sucesso!');
+    alert('Cadastrado com sucesso! Faça login.');
     setModoLogin('login');
     setLoginForm({...loginForm, restaurante: cadastroForm.restaurante});
     setCadastroForm({ restaurante: '', senha: '' });
   };
 
   const fazerLogin = () => {
-    if (!loginForm.restaurante || !loginForm.usuario || !loginForm.senha) {
-      alert('Preencha todos os campos');
-      return;
-    }
-    const chave = `restaurante_${loginForm.restaurante.trim()}`;
-    const senhaCorreta = localStorage.getItem(chave);
-    if (!senhaCorreta) {
-      alert('Restaurante não encontrado!');
-      return;
-    }
-    if (senhaCorreta !== loginForm.senha) {
-      alert('Senha incorreta!');
-      return;
-    }
-    const usuario = {
-      restaurante: loginForm.restaurante.trim(),
-      nome: loginForm.usuario.trim()
-    };
-    setUsuarioLogado(usuario);
-    localStorage.setItem('usuarioLogado', JSON.stringify(usuario));
-    carregarDados(usuario.restaurante);
+    if (!loginForm.restaurante || !loginForm.usuario || !loginForm.senha) { alert('Preencha todos os campos'); return; }
+    const chave = 'restaurante_' + loginForm.restaurante.trim();
+    const senha = localStorage.getItem(chave);
+    if (!senha) { alert('Restaurante não encontrado!'); return; }
+    if (senha !== loginForm.senha) { alert('Senha incorreta!'); return; }
+    const u = { restaurante: loginForm.restaurante.trim(), nome: loginForm.usuario.trim() };
+    setUsuarioLogado(u);
+    localStorage.setItem('usuarioLogado', JSON.stringify(u));
+    carregarDados(u.restaurante);
     setTela('home');
     setLoginForm({ restaurante: '', usuario: '', senha: '' });
   };
@@ -149,6 +112,7 @@ const fazerCadastro = () => {
     setMostrarModalPasta(false);
     setNomePasta('');
     setImpressoraConectada(null);
+    setStatusImpressora('offline');
     setFormulario({ produto: '', diasValidade: '3', sif: '', pasta: '' });
     setLoginForm({ restaurante: '', usuario: '', senha: '' });
     setCadastroForm({ restaurante: '', senha: '' });
@@ -156,458 +120,416 @@ const fazerCadastro = () => {
     setTela('login');
   };
 
-
-
-const toggleFullscreen = () => {
-    const elem = document.documentElement;
+  const toggleFullscreen = () => {
+    const el = document.documentElement;
     if (!document.fullscreenElement) {
-      if (elem.requestFullscreen) {
-        elem.requestFullscreen();
-      } else if (elem.webkitRequestFullscreen) {
-        elem.webkitRequestFullscreen();
-      }
+      (el.requestFullscreen || el.webkitRequestFullscreen || el.msRequestFullscreen).call(el);
       setIsFullscreen(true);
     } else {
-      if (document.exitFullscreen) {
-        document.exitFullscreen();
-      } else if (document.webkitExitFullscreen) {
-        document.webkitExitFullscreen();
-      }
+      (document.exitFullscreen || document.webkitExitFullscreen || document.msExitFullscreen).call(document);
       setIsFullscreen(false);
     }
   };
 
   useEffect(() => {
-    const handleFullscreenChange = () => {
-      setIsFullscreen(!!document.fullscreenElement);
-    };
-    document.addEventListener('fullscreenchange', handleFullscreenChange);
-    document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
-    return () => {
-      document.removeEventListener('fullscreenchange', handleFullscreenChange);
-      document.removeEventListener('webkitfullscreenchange', handleFullscreenChange);
-    };
+    const fn = () => setIsFullscreen(!!document.fullscreenElement);
+    document.addEventListener('fullscreenchange', fn);
+    document.addEventListener('webkitfullscreenchange', fn);
+    return () => { document.removeEventListener('fullscreenchange', fn); document.removeEventListener('webkitfullscreenchange', fn); };
   }, []);
 
-  const calcularDatasFrescas = (diasValidade) => {
+  const calcularDatasFrescas = (dias) => {
     const agora = new Date();
-    const ano = agora.getFullYear();
-    const mes = String(agora.getMonth() + 1).padStart(2, '0');
-    const dia = String(agora.getDate()).padStart(2, '0');
-    const dataFabricacao = `${ano}-${mes}-${dia}`;
-    const dataVal = new Date(agora.getFullYear(), agora.getMonth(), agora.getDate());
-    dataVal.setDate(dataVal.getDate() + parseInt(diasValidade));
-    const anoVal = dataVal.getFullYear();
-    const mesVal = String(dataVal.getMonth() + 1).padStart(2, '0');
-    const diaVal = String(dataVal.getDate()).padStart(2, '0');
-    const dataValidade = `${anoVal}-${mesVal}-${diaVal}`;
-    const hora = agora.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', hour12: false });
-    return { dataFabricacao, dataValidade, horaFabricacao: hora };
+    const pad = n => String(n).padStart(2, '0');
+    const dataFabricacao = `${agora.getFullYear()}-${pad(agora.getMonth()+1)}-${pad(agora.getDate())}`;
+    const val = new Date(agora.getFullYear(), agora.getMonth(), agora.getDate());
+    val.setDate(val.getDate() + parseInt(dias));
+    const dataValidade = `${val.getFullYear()}-${pad(val.getMonth()+1)}-${pad(val.getDate())}`;
+    const horaFabricacao = agora.toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit', hour12:false });
+    return { dataFabricacao, dataValidade, horaFabricacao };
   };
 
-  const formatarData = (data) => {
-    const [ano, mes, dia] = data.split('-');
-    return `${dia}/${mes}/${ano}`;
-  };
+  const fmt = (d) => { const [a,m,dia] = d.split('-'); return `${dia}/${m}/${a}`; };
 
-
-
-const adicionarPasta = () => {
-    if (nomePasta && nomePasta.trim()) {
-      const novaPasta = { id: Date.now(), nome: nomePasta.trim(), etiquetas: [] };
-      setPastas([...pastas, novaPasta].sort((a, b) => a.nome.localeCompare(b.nome)));
-      setNomePasta('');
-      setMostrarModalPasta(false);
-    } else {
-      alert('Por favor, digite o nome da pasta');
-    }
+  const adicionarPasta = () => {
+    if (!nomePasta.trim()) { alert('Digite o nome da pasta'); return; }
+    const nova = { id: Date.now(), nome: nomePasta.trim(), etiquetas: [] };
+    setPastas([...pastas, nova].sort((a,b) => a.nome.localeCompare(b.nome)));
+    setNomePasta('');
+    setMostrarModalPasta(false);
   };
 
   const adicionarEtiqueta = () => {
-    if (!formulario.produto || formulario.produto.trim() === '') {
-      alert('❌ Por favor, preencha o nome do produto');
-      return;
-    }
-    if (!formulario.pasta || formulario.pasta === '') {
-      alert('❌ Por favor, selecione uma pasta');
-      return;
-    }
-    try {
-      const novaEtiqueta = {
-        id: Date.now(),
-        produto: formulario.produto,
-        diasValidade: parseInt(formulario.diasValidade),
-        responsavel: usuarioLogado.nome,
-        sif: formulario.sif,
-      };
-      const novasPastas = pastas.map(pasta => {
-        if (pasta.id === parseInt(formulario.pasta)) {
-          return { ...pasta, etiquetas: [...pasta.etiquetas, novaEtiqueta] };
-        }
-        return pasta;
-      });
-      setPastas(novasPastas);
-      setFormulario({ produto: '', diasValidade: '3', sif: '', pasta: '' });
-      alert('✅ Etiqueta criada com sucesso!');
-      setTimeout(() => setTela('home'), 500);
-    } catch (error) {
-      alert('❌ Erro: ' + error.message);
-    }
+    if (!formulario.produto.trim()) { alert('Preencha o nome do produto'); return; }
+    if (!formulario.pasta) { alert('Selecione uma pasta'); return; }
+    const nova = {
+      id: Date.now(),
+      produto: formulario.produto.trim(),
+      diasValidade: parseInt(formulario.diasValidade) || 3,
+      responsavel: usuarioLogado.nome,
+      sif: formulario.sif,
+    };
+    setPastas(pastas.map(p => p.id === parseInt(formulario.pasta) ? {...p, etiquetas: [...p.etiquetas, nova]} : p));
+    setFormulario({ produto: '', diasValidade: '3', sif: '', pasta: '' });
+    alert('✅ Etiqueta criada!');
+    setTimeout(() => setTela('home'), 300);
   };
 
   const excluirEtiqueta = (pastaId, etiquetaId) => {
-    try {
-      const novasPastas = pastas.map(pasta => {
-        if (pasta.id === pastaId) {
-          return { ...pasta, etiquetas: pasta.etiquetas.filter(e => e.id !== etiquetaId) };
-        }
-        return pasta;
-      });
-      setPastas(novasPastas);
-      alert('✅ Etiqueta excluída!');
-    } catch (error) {
-      alert('❌ Erro ao excluir');
-    }
+    setPastas(pastas.map(p => p.id === pastaId ? {...p, etiquetas: p.etiquetas.filter(e => e.id !== etiquetaId)} : p));
+    alert('✅ Etiqueta excluída!');
   };
 
   const excluirPasta = (pastaId) => {
-    if (window.confirm('Deseja excluir esta pasta?')) {
-      setPastas(pastas.filter(p => p.id !== pastaId));
-      if (pastaAtual === pastaId) {
-        setTela('home');
-        setPastaAtual(null);
-      }
-    }
+    if (!window.confirm('Excluir esta pasta?')) return;
+    setPastas(pastas.filter(p => p.id !== pastaId));
+    if (pastaAtual === pastaId) { setTela('home'); setPastaAtual(null); }
   };
 
-
-
-const abrirModalImpressoras = async () => {
-    alert('Verificando Bluetooth...');
+  // BLUETOOTH - Impressora TSPL (Q10B-IV)
+  const conectarImpressora = async () => {
     if (!navigator.bluetooth) {
-      alert('❌ Bluetooth não disponível. Use Chrome e HTTPS!');
+      alert('❌ Bluetooth não disponível.\nUse Chrome no Android com HTTPS.');
       return;
     }
-    alert('✅ Abrindo seletor...');
+    setStatusImpressora('conectando');
     try {
       const device = await navigator.bluetooth.requestDevice({
         acceptAllDevices: true,
-        optionalServices: [
-          '000018f0-0000-1000-8000-00805f9b34fb',
-          'e7810a71-73ae-499d-8c15-faa9aef0c3f2',
-          '00001101-0000-1000-8000-00805f9b34fb'
-        ]
+        optionalServices: ['000018f0-0000-1000-8000-00805f9b34fb', 'e7810a71-73ae-499d-8c15-faa9aef0c3f2']
       });
-      alert('Dispositivo: ' + (device.name || 'Sem nome'));
-      setStatusImpressora('conectando');
       const server = await device.gatt.connect();
       device.addEventListener('gattserverdisconnected', () => {
         setStatusImpressora('offline');
         setImpressoraConectada(null);
       });
-      setImpressoraConectada({
-        nome: device.name || 'BlueTooth Printer',
-        id: device.id,
-        device: device,
-        server: server
-      });
+      setImpressoraConectada({ nome: device.name || 'BlueTooth Printer', device, server });
       setStatusImpressora('online');
-      alert('✅ CONECTADO!');
-    } catch (error) {
+      alert('✅ Conectado: ' + (device.name || 'Impressora'));
+    } catch(e) {
       setStatusImpressora('offline');
-      if (error.name !== 'NotFoundError') {
-        alert('❌ ERRO: ' + error.message);
-      }
+      if (e.name !== 'NotFoundError') alert('❌ Erro: ' + e.message);
     }
   };
 
   const desconectarImpressora = () => {
-    if (impressoraConectada?.device?.gatt?.connected) {
-      impressoraConectada.device.gatt.disconnect();
-    }
+    if (impressoraConectada?.device?.gatt?.connected) impressoraConectada.device.gatt.disconnect();
     setImpressoraConectada(null);
     setStatusImpressora('offline');
-    alert('Desconectado!');
   };
 
   const imprimirEtiqueta = async (etiqueta) => {
-    const { dataFabricacao, dataValidade, horaFabricacao } = calcularDatasFrescas(etiqueta.diasValidade);
-    const etiquetaAtualizada = { ...etiqueta, dataFabricacao, dataValidade, horaFabricacao };
+    const datas = calcularDatasFrescas(etiqueta.diasValidade);
+    const e = {...etiqueta, ...datas};
     if (impressoraConectada && statusImpressora === 'online') {
-      await imprimirViaBluetooth(etiquetaAtualizada);
+      await imprimirViaTSPL(e);
     } else {
-      imprimirViaWeb(etiquetaAtualizada);
+      imprimirViaWeb(e);
     }
   };
 
-  const imprimirViaBluetooth = async (etiqueta) => {
+  // TSPL é o protocolo correto para a impressora Q10B-IV-Printer
+  const imprimirViaTSPL = async (etiqueta) => {
     try {
-      if (!impressoraConectada?.device) {
-        imprimirViaWeb(etiqueta);
-        return;
-      }
       const server = impressoraConectada.server;
-      let service;
+      let service, writeChar;
       try {
         service = await server.getPrimaryService('000018f0-0000-1000-8000-00805f9b34fb');
       } catch {
         service = await server.getPrimaryService('e7810a71-73ae-499d-8c15-faa9aef0c3f2');
       }
-      const characteristic = await service.getCharacteristics();
-      const writeChar = characteristic.find(c => c.properties.write || c.properties.writeWithoutResponse);
-      if (!writeChar) throw new Error('Não encontrado');
+      const chars = await service.getCharacteristics();
+      writeChar = chars.find(c => c.properties.write || c.properties.writeWithoutResponse);
+      if (!writeChar) throw new Error('Característica não encontrada');
+
+      // Comandos TSPL para etiqueta 50x30mm
+      const linhas = [
+        'SIZE 50 mm,30 mm',
+        'GAP 3 mm,0',
+        'DIRECTION 0',
+        'CLS',
+        `TEXT 25,5,"3",0,1,1,"${etiqueta.produto}"`,
+        `TEXT 5,80,"2",0,1,1,"Fab: ${fmt(etiqueta.dataFabricacao)} ${etiqueta.horaFabricacao}"`,
+        `TEXT 5,110,"2",0,1,1,"Val: ${fmt(etiqueta.dataValidade)}"`,
+        `TEXT 5,140,"2",0,1,1,"Resp: ${etiqueta.responsavel}"`,
+        etiqueta.sif ? `TEXT 5,170,"2",0,1,1,"SIF: ${etiqueta.sif}"` : '',
+        'PRINT 1,1',
+        ''
+      ].filter(l => l !== '').join('\r\n');
+
       const encoder = new TextEncoder();
-      let cmd = '\x1B\x40\x1B\x61\x01\x1B\x21\x30' + etiqueta.produto + '\n\n\x1B\x21\x00\x1B\x61\x00';
-      cmd += 'Fab: ' + formatarData(etiqueta.dataFabricacao) + ' ' + etiqueta.horaFabricacao + '\n';
-      cmd += 'Val: ' + formatarData(etiqueta.dataValidade) + '\n';
-      cmd += 'Resp: ' + etiqueta.responsavel + '\n';
-      if (etiqueta.sif) cmd += 'SIF: ' + etiqueta.sif + '\n';
-      cmd += '\n\n\x1D\x56\x00';
-      await writeChar.writeValue(encoder.encode(cmd));
-      alert('✓ Enviado!');
-    } catch (error) {
+      await writeChar.writeValue(encoder.encode(linhas));
+      alert('✅ Etiqueta enviada!');
+    } catch(e) {
+      console.error(e);
+      alert('❌ Erro Bluetooth: ' + e.message + '\nUsando impressão web...');
       setStatusImpressora('offline');
       imprimirViaWeb(etiqueta);
     }
   };
 
   const imprimirViaWeb = (etiqueta) => {
-    const w = window.open('', '', 'width=800,height=600');
-    w.document.write(`<html><head><title>Etiqueta</title><style>@page{size:50mm 30mm;margin:0}body{margin:0;padding:2mm;font-family:Arial;width:50mm;height:30mm}.etiqueta{border:2px solid black;padding:2mm;width:100%;height:100%}h1{text-align:center;font-size:12px;margin:0 0 2mm 0;border-bottom:1px solid black;padding-bottom:1mm}p{font-size:8px;margin:0.5mm 0;line-height:1.2}</style></head><body><div class="etiqueta"><h1>${etiqueta.produto}</h1><p><strong>Fab:</strong> ${formatarData(etiqueta.dataFabricacao)} ${etiqueta.horaFabricacao}</p><p><strong>Val:</strong> ${formatarData(etiqueta.dataValidade)}</p><p><strong>Resp:</strong> ${etiqueta.responsavel}</p>${etiqueta.sif ? `<p><strong>SIF:</strong> ${etiqueta.sif}</p>` : ''}</div></body></html>`);
+    const w = window.open('', '', 'width=400,height=300');
+    w.document.write(`<!DOCTYPE html><html><head><title>Etiqueta</title><style>
+      @page{size:50mm 30mm;margin:0}
+      *{box-sizing:border-box}
+      body{margin:0;padding:2mm;font-family:Arial,sans-serif;width:50mm;height:30mm;overflow:hidden}
+      .box{border:1.5px solid #000;padding:1.5mm;width:100%;height:100%;display:flex;flex-direction:column;justify-content:space-between}
+      h1{text-align:center;font-size:11px;font-weight:bold;margin:0 0 1mm 0;border-bottom:1px solid #000;padding-bottom:1mm;line-height:1.2}
+      p{font-size:7px;margin:0;line-height:1.4}
+      strong{font-weight:bold}
+    </style></head><body>
+    <div class="box">
+      <h1>${etiqueta.produto}</h1>
+      <div>
+        <p><strong>Fab:</strong> ${fmt(etiqueta.dataFabricacao)} ${etiqueta.horaFabricacao}</p>
+        <p><strong>Val:</strong> ${fmt(etiqueta.dataValidade)}</p>
+        <p><strong>Resp:</strong> ${etiqueta.responsavel}</p>
+        ${etiqueta.sif ? `<p><strong>SIF:</strong> ${etiqueta.sif}</p>` : ''}
+      </div>
+    </div>
+    <script>window.onload=function(){window.print();setTimeout(()=>window.close(),500)}<\/script>
+    </body></html>`);
     w.document.close();
-    setTimeout(() => { w.print(); w.close(); }, 250);
   };
 
-
-
-// Renderização da Interface
-  if (tela === 'login') {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center p-6">
-        <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full">
-          <h1 className="text-3xl font-bold text-center text-gray-800 mb-8">Sistema de Etiquetas</h1>
-          {modoLogin === 'login' ? (
-            <div>
-              <h2 className="text-xl font-semibold text-gray-700 mb-4">Login</h2>
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Nome do Restaurante</label>
-                  <input type="text" value={loginForm.restaurante} onChange={(e) => setLoginForm({...loginForm, restaurante: e.target.value})} className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none" placeholder="Ex: Restaurante Sabor" />
-                </div>
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Seu Nome</label>
-                  <input type="text" value={loginForm.usuario} onChange={(e) => setLoginForm({...loginForm, usuario: e.target.value})} className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none" placeholder="Ex: João Silva" />
-                </div>
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Senha</label>
-                  <input type="password" value={loginForm.senha} onChange={(e) => setLoginForm({...loginForm, senha: e.target.value})} onKeyPress={(e) => e.key === 'Enter' && fazerLogin()} className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none" placeholder="••••••••" />
-                </div>
-                <button onClick={fazerLogin} className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg">Entrar</button>
-              </div>
-              <p className="text-center text-gray-600 mt-6">Não tem conta? <button onClick={() => setModoLogin('cadastro')} className="text-blue-600 font-semibold hover:underline">Cadastrar Restaurante</button></p>
-            </div>
-          ) : (
-            <div>
-              <h2 className="text-xl font-semibold text-gray-700 mb-4">Cadastrar Restaurante</h2>
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Nome do Restaurante</label>
-                  <input type="text" value={cadastroForm.restaurante} onChange={(e) => setCadastroForm({...cadastroForm, restaurante: e.target.value})} className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none" placeholder="Ex: Restaurante Sabor" />
-                </div>
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Senha</label>
-                  <input type="password" value={cadastroForm.senha} onChange={(e) => setCadastroForm({...cadastroForm, senha: e.target.value})} onKeyPress={(e) => e.key === 'Enter' && fazerCadastro()} className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none" placeholder="••••••••" />
-                </div>
-                <button onClick={fazerCadastro} className="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 rounded-lg">Cadastrar</button>
-              </div>
-              <p className="text-center text-gray-600 mt-6">Já tem conta? <button onClick={() => setModoLogin('login')} className="text-purple-600 font-semibold hover:underline">Fazer Login</button></p>
-            </div>
-          )}
+  const HUD = () => (
+    <div style={{position:'fixed', bottom:'24px', right:'24px', zIndex:9999}}>
+      <div style={{
+        borderRadius:'12px', padding:'12px 16px', boxShadow:'0 4px 20px rgba(0,0,0,0.3)',
+        backgroundColor: statusImpressora === 'online' ? '#16a34a' : statusImpressora === 'conectando' ? '#ca8a04' : '#dc2626'
+      }}>
+        <div style={{display:'flex', alignItems:'center', gap:'10px', color:'white'}}>
+          <div style={{
+            width:'12px', height:'12px', borderRadius:'50%', backgroundColor:'white',
+            opacity: statusImpressora === 'offline' ? 0.5 : 1
+          }} className={statusImpressora === 'online' ? 'animate-pulse' : statusImpressora === 'conectando' ? 'animate-ping' : ''}></div>
+          <span style={{fontWeight:'bold', fontSize:'14px', color:'white'}}>
+            {statusImpressora === 'online' ? '🟢 ONLINE' : statusImpressora === 'conectando' ? '🟡 CONECTANDO...' : '🔴 OFFLINE'}
+          </span>
         </div>
+        {impressoraConectada && <div style={{fontSize:'11px', color:'white', marginTop:'4px', paddingLeft:'22px'}}>🖨️ {impressoraConectada.nome}</div>}
       </div>
-    );
-  }
+    </div>
+  );
 
-
-
-if (tela === 'home') {
-    return (
-      <div className="min-h-screen bg-gray-100 p-6">
-        <div className="max-w-4xl mx-auto">
-          <div className="fixed top-4 left-4 z-50">
-            <button onClick={toggleFullscreen} className="bg-gray-800 hover:bg-gray-900 text-white p-3 rounded-lg shadow-lg">
-              {isFullscreen ? <Minimize className="w-6 h-6" /> : <Maximize className="w-6 h-6" />}
-            </button>
-          </div>
-          <div className="fixed bottom-6 right-6 z-50">
-            <div className={`rounded-lg shadow-2xl p-4 ${statusImpressora === 'online' ? 'bg-green-600' : statusImpressora === 'conectando' ? 'bg-yellow-600' : 'bg-red-600'}`}>
-              <div className="flex items-center gap-3 text-white">
-                <div className={`w-4 h-4 rounded-full ${statusImpressora === 'online' ? 'bg-white animate-pulse' : statusImpressora === 'conectando' ? 'bg-white animate-ping' : 'bg-white opacity-50'}`}></div>
-                <div className="text-base font-bold">{statusImpressora === 'online' && 'ONLINE'}{statusImpressora === 'conectando' && 'CONECTANDO'}{statusImpressora === 'offline' && 'OFFLINE'}</div>
-              </div>
-              {impressoraConectada && <div className="text-sm text-white mt-2 pl-7 font-medium">📱 {impressoraConectada.nome}</div>}
-            </div>
-          </div>
-          <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-            <div className="flex justify-between items-center mb-4">
-              <div>
-                <h1 className="text-3xl font-bold text-gray-800">Etiquetas de Validação</h1>
-                <p className="text-gray-600 mt-1"><User className="w-4 h-4 inline mr-1" />{usuarioLogado?.nome} - {usuarioLogado?.restaurante}</p>
-              </div>
-              <div className="flex gap-2 flex-wrap">
-                <button onClick={abrirModalImpressoras} className="bg-blue-600 active:bg-blue-800 text-white font-bold py-3 px-5 rounded flex items-center gap-2"><Wifi className="w-5 h-5" />{impressoraConectada ? 'TROCAR' : 'CONECTAR'}</button>
-                {impressoraConectada && <button onClick={desconectarImpressora} className="bg-orange-600 active:bg-orange-800 text-white font-bold py-3 px-5 rounded flex items-center gap-2"><Wifi className="w-5 h-5" />Desconectar</button>}
-                <button onClick={fazerLogout} className="bg-red-600 active:bg-red-800 text-white font-bold py-3 px-5 rounded flex items-center gap-2"><LogOut className="w-5 h-5" />Sair</button>
-              </div>
-            </div>
-            <div className="flex gap-3 flex-wrap">
-              <button onClick={() => setMostrarModalPasta(true)} className="bg-blue-600 active:bg-blue-800 text-white font-semibold py-3 px-5 rounded flex items-center gap-2"><Plus className="w-5 h-5" />Nova Pasta</button>
-              <button onClick={() => setTela('criar')} className="bg-green-600 active:bg-green-800 text-white font-semibold py-3 px-5 rounded flex items-center gap-2"><Plus className="w-5 h-5" />Criar Etiqueta</button>
-            </div>
-          </div>
-          {mostrarModalPasta && (
-            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-              <div className="bg-white rounded-lg shadow-xl p-6 max-w-md w-full mx-4">
-                <h2 className="text-2xl font-bold text-gray-800 mb-4">Nova Pasta</h2>
-                <input type="text" value={nomePasta} onChange={(e) => setNomePasta(e.target.value)} onKeyPress={(e) => e.key === 'Enter' && adicionarPasta()} className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none mb-4" placeholder="Nome da pasta" autoFocus />
-                <div className="flex gap-3">
-                  <button onClick={() => { setMostrarModalPasta(false); setNomePasta(''); }} className="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded">Cancelar</button>
-                  <button onClick={adicionarPasta} className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded">Criar</button>
-                </div>
-              </div>
-            </div>
-          )}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {pastas.map(pasta => (
-              <div key={pasta.id} className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow cursor-pointer relative">
-                <button onClick={(e) => { e.stopPropagation(); excluirPasta(pasta.id); }} className="absolute top-2 right-2 text-red-500 hover:text-red-700"><Trash2 className="w-4 h-4" /></button>
-                <div onClick={() => { setPastaAtual(pasta.id); setTela('pasta'); }}>
-                  <Folder className="w-16 h-16 text-yellow-500 mb-3" />
-                  <h2 className="text-xl font-bold text-gray-800">{pasta.nome}</h2>
-                  <p className="text-gray-600 text-sm mt-2">{pasta.etiquetas.length} {pasta.etiquetas.length === 1 ? 'etiqueta' : 'etiquetas'}</p>
-                </div>
+  // =====================
+  // TELA LOGIN
+  // =====================
+  if (tela === 'login') return (
+    <div style={{minHeight:'100vh', background:'linear-gradient(135deg, #3b82f6, #7c3aed)', display:'flex', alignItems:'center', justifyContent:'center', padding:'24px'}}>
+      <div style={{background:'white', borderRadius:'16px', padding:'32px', maxWidth:'400px', width:'100%', boxShadow:'0 20px 60px rgba(0,0,0,0.3)'}}>
+        <h1 style={{fontSize:'28px', fontWeight:'bold', textAlign:'center', color:'#1f2937', marginBottom:'32px'}}>🏷️ Sistema de Etiquetas</h1>
+        {modoLogin === 'login' ? (
+          <div>
+            <h2 style={{fontSize:'18px', fontWeight:'600', color:'#374151', marginBottom:'16px'}}>Login</h2>
+            {[
+              {label:'Nome do Restaurante', key:'restaurante', type:'text', placeholder:'Ex: Mokutan'},
+              {label:'Seu Nome', key:'usuario', type:'text', placeholder:'Ex: Milton'},
+              {label:'Senha', key:'senha', type:'password', placeholder:'••••••••'},
+            ].map(f => (
+              <div key={f.key} style={{marginBottom:'16px'}}>
+                <label style={{display:'block', fontSize:'13px', fontWeight:'600', color:'#374151', marginBottom:'6px'}}>{f.label}</label>
+                <input type={f.type} value={loginForm[f.key]} onChange={e => setLoginForm({...loginForm, [f.key]: e.target.value})}
+                  onKeyPress={e => e.key === 'Enter' && fazerLogin()}
+                  placeholder={f.placeholder}
+                  style={{width:'100%', padding:'10px 14px', border:'2px solid #d1d5db', borderRadius:'8px', fontSize:'15px', outline:'none', boxSizing:'border-box'}} />
               </div>
             ))}
+            <button onClick={fazerLogin} style={{width:'100%', padding:'14px', background:'#2563eb', color:'white', border:'none', borderRadius:'8px', fontSize:'16px', fontWeight:'bold', cursor:'pointer', marginTop:'8px'}}>Entrar</button>
+            <p style={{textAlign:'center', color:'#6b7280', marginTop:'20px', fontSize:'14px'}}>Não tem conta? <button onClick={() => setModoLogin('cadastro')} style={{color:'#2563eb', fontWeight:'600', background:'none', border:'none', cursor:'pointer', fontSize:'14px'}}>Cadastrar Restaurante</button></p>
           </div>
-          {pastas.length === 0 && (
-            <div className="text-center py-12 text-gray-500">
-              <Folder className="w-16 h-16 mx-auto mb-4 opacity-50" />
-              <p className="text-lg">Nenhuma pasta criada ainda</p>
-              <p className="text-sm">Clique em "Nova Pasta" para começar</p>
-            </div>
-          )}
-        </div>
+        ) : (
+          <div>
+            <h2 style={{fontSize:'18px', fontWeight:'600', color:'#374151', marginBottom:'16px'}}>Cadastrar Restaurante</h2>
+            {[
+              {label:'Nome do Restaurante', key:'restaurante', type:'text', placeholder:'Ex: Mokutan'},
+              {label:'Senha', key:'senha', type:'password', placeholder:'••••••••'},
+            ].map(f => (
+              <div key={f.key} style={{marginBottom:'16px'}}>
+                <label style={{display:'block', fontSize:'13px', fontWeight:'600', color:'#374151', marginBottom:'6px'}}>{f.label}</label>
+                <input type={f.type} value={cadastroForm[f.key]} onChange={e => setCadastroForm({...cadastroForm, [f.key]: e.target.value})}
+                  onKeyPress={e => e.key === 'Enter' && fazerCadastro()}
+                  placeholder={f.placeholder}
+                  style={{width:'100%', padding:'10px 14px', border:'2px solid #d1d5db', borderRadius:'8px', fontSize:'15px', outline:'none', boxSizing:'border-box'}} />
+              </div>
+            ))}
+            <button onClick={fazerCadastro} style={{width:'100%', padding:'14px', background:'#7c3aed', color:'white', border:'none', borderRadius:'8px', fontSize:'16px', fontWeight:'bold', cursor:'pointer', marginTop:'8px'}}>Cadastrar</button>
+            <p style={{textAlign:'center', color:'#6b7280', marginTop:'20px', fontSize:'14px'}}>Já tem conta? <button onClick={() => setModoLogin('login')} style={{color:'#7c3aed', fontWeight:'600', background:'none', border:'none', cursor:'pointer', fontSize:'14px'}}>Fazer Login</button></p>
+          </div>
+        )}
       </div>
-    );
-  }
+    </div>
+  );
 
-
-
-if (tela === 'criar') {
-    return (
-      <div className="min-h-screen bg-gray-100 p-6">
-        <div className="max-w-2xl mx-auto">
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <button onClick={() => setTela('home')} className="flex items-center gap-2 text-gray-600 hover:text-gray-800 mb-4">
-              <ArrowLeft className="w-5 h-5" />Voltar
-            </button>
-            <h1 className="text-3xl font-bold text-gray-800 mb-2">Criar Etiqueta</h1>
-            <p className="text-gray-600 mb-6">Responsável: <strong>{usuarioLogado?.nome}</strong></p>
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Pasta *</label>
-                <select value={formulario.pasta} onChange={(e) => setFormulario({...formulario, pasta: e.target.value})} className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-green-500 focus:outline-none">
-                  <option value="">Selecione uma pasta</option>
-                  {pastas.map(pasta => (
-                    <option key={pasta.id} value={pasta.id}>{pasta.nome}</option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Nome do Produto *</label>
-                <input type="text" value={formulario.produto} onChange={(e) => setFormulario({...formulario, produto: e.target.value})} className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-green-500 focus:outline-none" placeholder="Ex: Frango Grelhado" />
-              </div>
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Dias de Validade *</label>
-                <input type="number" value={formulario.diasValidade} onChange={(e) => setFormulario({...formulario, diasValidade: e.target.value})} className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-green-500 focus:outline-none" min="1" placeholder="Ex: 3" />
-                <p className="text-sm text-blue-600 mt-1">💡 A etiqueta sempre usará a data atual ao imprimir</p>
-                <p className="text-sm text-green-600 mt-1 font-semibold">
-                  Se imprimir hoje: Fab {formatarData(calcularDatasFrescas(formulario.diasValidade || '3').dataFabricacao)} → Val {formatarData(calcularDatasFrescas(formulario.diasValidade || '3').dataValidade)}
-                </p>
-              </div>
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">SIF</label>
-                <input type="text" value={formulario.sif} onChange={(e) => setFormulario({...formulario, sif: e.target.value})} className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-green-500 focus:outline-none" placeholder="Ex: SIF 1234" />
-              </div>
-              <button onClick={adicionarEtiqueta} className="w-full bg-green-600 active:bg-green-800 text-white font-bold py-4 px-6 rounded-lg flex items-center justify-center gap-2">
-                <Plus className="w-5 h-5" />Criar Etiqueta
+  // =====================
+  // TELA HOME
+  // =====================
+  if (tela === 'home') return (
+    <div style={{minHeight:'100vh', background:'#f3f4f6', padding:'16px'}}>
+      <HUD />
+      <div style={{maxWidth:'900px', margin:'0 auto'}}>
+        <div style={{background:'white', borderRadius:'12px', padding:'20px', marginBottom:'20px', boxShadow:'0 2px 8px rgba(0,0,0,0.1)'}}>
+          <div style={{display:'flex', justifyContent:'space-between', alignItems:'flex-start', marginBottom:'16px', flexWrap:'wrap', gap:'12px'}}>
+            <div>
+              <h1 style={{fontSize:'24px', fontWeight:'bold', color:'#1f2937', margin:0}}>🏷️ Etiquetas de Validação</h1>
+              <p style={{color:'#6b7280', margin:'4px 0 0 0', fontSize:'14px'}}>👤 {usuarioLogado?.nome} — {usuarioLogado?.restaurante}</p>
+            </div>
+            <div style={{display:'flex', gap:'8px', flexWrap:'wrap'}}>
+              <button onClick={conectarImpressora} style={{padding:'10px 16px', background:'#2563eb', color:'white', border:'none', borderRadius:'8px', fontWeight:'bold', cursor:'pointer', display:'flex', alignItems:'center', gap:'6px', fontSize:'14px'}}>
+                🖨️ {impressoraConectada ? 'TROCAR' : 'CONECTAR'}
               </button>
+              {impressoraConectada && <button onClick={desconectarImpressora} style={{padding:'10px 16px', background:'#ea580c', color:'white', border:'none', borderRadius:'8px', fontWeight:'bold', cursor:'pointer', fontSize:'14px'}}>Desconectar</button>}
+              <button onClick={fazerLogout} style={{padding:'10px 16px', background:'#dc2626', color:'white', border:'none', borderRadius:'8px', fontWeight:'bold', cursor:'pointer', fontSize:'14px'}}>Sair</button>
+              <button onClick={toggleFullscreen} style={{padding:'10px 12px', background:'#374151', color:'white', border:'none', borderRadius:'8px', cursor:'pointer', fontSize:'14px'}}>{isFullscreen ? '⊡' : '⛶'}</button>
             </div>
+          </div>
+          <div style={{display:'flex', gap:'10px', flexWrap:'wrap'}}>
+            <button onClick={() => setMostrarModalPasta(true)} style={{padding:'10px 18px', background:'#2563eb', color:'white', border:'none', borderRadius:'8px', fontWeight:'600', cursor:'pointer', fontSize:'14px'}}>📁 Nova Pasta</button>
+            <button onClick={() => setTela('criar')} style={{padding:'10px 18px', background:'#16a34a', color:'white', border:'none', borderRadius:'8px', fontWeight:'600', cursor:'pointer', fontSize:'14px'}}>➕ Criar Etiqueta</button>
+          </div>
+        </div>
+
+        {mostrarModalPasta && (
+          <div style={{position:'fixed', inset:0, background:'rgba(0,0,0,0.5)', display:'flex', alignItems:'center', justifyContent:'center', zIndex:9998, padding:'16px'}}>
+            <div style={{background:'white', borderRadius:'12px', padding:'24px', maxWidth:'400px', width:'100%'}}>
+              <h2 style={{fontSize:'22px', fontWeight:'bold', marginBottom:'16px', color:'#1f2937'}}>Nova Pasta</h2>
+              <input autoFocus type="text" value={nomePasta} onChange={e => setNomePasta(e.target.value)} onKeyPress={e => e.key === 'Enter' && adicionarPasta()} placeholder="Nome da pasta"
+                style={{width:'100%', padding:'10px 14px', border:'2px solid #d1d5db', borderRadius:'8px', fontSize:'15px', outline:'none', boxSizing:'border-box', marginBottom:'16px'}} />
+              <div style={{display:'flex', gap:'10px'}}>
+                <button onClick={() => { setMostrarModalPasta(false); setNomePasta(''); }} style={{flex:1, padding:'10px', background:'#e5e7eb', border:'none', borderRadius:'8px', cursor:'pointer', fontWeight:'600'}}>Cancelar</button>
+                <button onClick={adicionarPasta} style={{flex:1, padding:'10px', background:'#2563eb', color:'white', border:'none', borderRadius:'8px', cursor:'pointer', fontWeight:'600'}}>Criar</button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        <div style={{display:'grid', gridTemplateColumns:'repeat(auto-fill, minmax(200px, 1fr))', gap:'16px'}}>
+          {pastas.map(pasta => (
+            <div key={pasta.id} style={{background:'white', borderRadius:'12px', padding:'20px', boxShadow:'0 2px 8px rgba(0,0,0,0.1)', cursor:'pointer', position:'relative'}}>
+              <button onClick={e => { e.stopPropagation(); excluirPasta(pasta.id); }} style={{position:'absolute', top:'8px', right:'8px', background:'none', border:'none', color:'#ef4444', cursor:'pointer', fontSize:'18px'}}>🗑️</button>
+              <div onClick={() => { setPastaAtual(pasta.id); setTela('pasta'); }}>
+                <div style={{fontSize:'48px', marginBottom:'8px'}}>📁</div>
+                <h2 style={{fontSize:'18px', fontWeight:'bold', color:'#1f2937', margin:'0 0 4px 0'}}>{pasta.nome}</h2>
+                <p style={{fontSize:'13px', color:'#6b7280', margin:0}}>{pasta.etiquetas.length} {pasta.etiquetas.length === 1 ? 'etiqueta' : 'etiquetas'}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {pastas.length === 0 && (
+          <div style={{textAlign:'center', padding:'48px', color:'#9ca3af'}}>
+            <div style={{fontSize:'64px', marginBottom:'16px'}}>📁</div>
+            <p style={{fontSize:'18px', marginBottom:'8px'}}>Nenhuma pasta criada ainda</p>
+            <p style={{fontSize:'14px'}}>Clique em "Nova Pasta" para começar</p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+
+  // =====================
+  // TELA CRIAR ETIQUETA
+  // =====================
+  if (tela === 'criar') {
+    const preview = calcularDatasFrescas(formulario.diasValidade || '3');
+    return (
+      <div style={{minHeight:'100vh', background:'#f3f4f6', padding:'16px'}}>
+        <div style={{maxWidth:'500px', margin:'0 auto'}}>
+          <div style={{background:'white', borderRadius:'12px', padding:'24px', boxShadow:'0 2px 8px rgba(0,0,0,0.1)'}}>
+            <button onClick={() => setTela('home')} style={{background:'none', border:'none', cursor:'pointer', color:'#6b7280', fontSize:'15px', marginBottom:'16px', display:'flex', alignItems:'center', gap:'6px'}}>← Voltar</button>
+            <h1 style={{fontSize:'24px', fontWeight:'bold', color:'#1f2937', marginBottom:'4px'}}>Criar Etiqueta</h1>
+            <p style={{color:'#6b7280', fontSize:'14px', marginBottom:'24px'}}>👤 Responsável: <strong>{usuarioLogado?.nome}</strong></p>
+
+            {[
+              {label:'Pasta *', type:'select'},
+              {label:'Nome do Produto *', key:'produto', type:'text', placeholder:'Ex: Frango Grelhado'},
+              {label:'Dias de Validade *', key:'diasValidade', type:'number', placeholder:'Ex: 3'},
+              {label:'SIF', key:'sif', type:'text', placeholder:'Ex: SIF 1234'},
+            ].map(f => (
+              <div key={f.label} style={{marginBottom:'16px'}}>
+                <label style={{display:'block', fontSize:'13px', fontWeight:'600', color:'#374151', marginBottom:'6px'}}>{f.label}</label>
+                {f.type === 'select' ? (
+                  <select value={formulario.pasta} onChange={e => setFormulario({...formulario, pasta: e.target.value})}
+                    style={{width:'100%', padding:'10px 14px', border:'2px solid #d1d5db', borderRadius:'8px', fontSize:'15px', outline:'none', boxSizing:'border-box'}}>
+                    <option value="">Selecione uma pasta</option>
+                    {pastas.map(p => <option key={p.id} value={p.id}>{p.nome}</option>)}
+                  </select>
+                ) : (
+                  <input type={f.type} value={formulario[f.key]} onChange={e => setFormulario({...formulario, [f.key]: e.target.value})}
+                    placeholder={f.placeholder} min={f.type === 'number' ? '1' : undefined}
+                    style={{width:'100%', padding:'10px 14px', border:'2px solid #d1d5db', borderRadius:'8px', fontSize:'15px', outline:'none', boxSizing:'border-box'}} />
+                )}
+              </div>
+            ))}
+
+            <div style={{background:'#f0fdf4', border:'1px solid #bbf7d0', borderRadius:'8px', padding:'12px', marginBottom:'20px'}}>
+              <p style={{margin:0, fontSize:'13px', color:'#166534'}}>💡 A data é gerada automaticamente ao imprimir</p>
+              <p style={{margin:'4px 0 0 0', fontSize:'13px', color:'#166534', fontWeight:'600'}}>Hoje: Fab {fmt(preview.dataFabricacao)} → Val {fmt(preview.dataValidade)}</p>
+            </div>
+
+            <button onClick={adicionarEtiqueta} style={{width:'100%', padding:'16px', background:'#16a34a', color:'white', border:'none', borderRadius:'8px', fontSize:'16px', fontWeight:'bold', cursor:'pointer'}}>
+              ➕ Criar Etiqueta
+            </button>
           </div>
         </div>
       </div>
     );
   }
 
-
-
-if (tela === 'pasta') {
+  // =====================
+  // TELA PASTA
+  // =====================
+  if (tela === 'pasta') {
     const pasta = pastas.find(p => p.id === pastaAtual);
     return (
-      <div className="min-h-screen bg-gray-100 p-6">
-        <div className="max-w-4xl mx-auto">
-          <div className="fixed bottom-6 right-6 z-50">
-            <div className={`rounded-lg shadow-2xl p-4 ${statusImpressora === 'online' ? 'bg-green-600' : statusImpressora === 'conectando' ? 'bg-yellow-600' : 'bg-red-600'}`}>
-              <div className="flex items-center gap-3 text-white">
-                <div className={`w-4 h-4 rounded-full ${statusImpressora === 'online' ? 'bg-white animate-pulse' : statusImpressora === 'conectando' ? 'bg-white animate-ping' : 'bg-white opacity-50'}`}></div>
-                <div className="text-base font-bold">{statusImpressora === 'online' && 'ONLINE'}{statusImpressora === 'conectando' && 'CONECTANDO'}{statusImpressora === 'offline' && 'OFFLINE'}</div>
-              </div>
-              {impressoraConectada && <div className="text-sm text-white mt-2 pl-7 font-medium">📱 {impressoraConectada.nome}</div>}
-            </div>
+      <div style={{minHeight:'100vh', background:'#f3f4f6', padding:'16px'}}>
+        <HUD />
+        <div style={{maxWidth:'700px', margin:'0 auto'}}>
+          <div style={{background:'white', borderRadius:'12px', padding:'20px', marginBottom:'16px', boxShadow:'0 2px 8px rgba(0,0,0,0.1)'}}>
+            <button onClick={() => { setTela('home'); setPastaAtual(null); }} style={{background:'none', border:'none', cursor:'pointer', color:'#6b7280', fontSize:'15px', marginBottom:'12px', display:'flex', alignItems:'center', gap:'6px'}}>← Voltar</button>
+            <h1 style={{fontSize:'24px', fontWeight:'bold', color:'#1f2937', margin:'0 0 4px 0'}}>📁 {pasta?.nome}</h1>
+            <p style={{color:'#6b7280', fontSize:'14px', margin:0}}>{pasta?.etiquetas.length} {pasta?.etiquetas.length === 1 ? 'etiqueta' : 'etiquetas'}</p>
           </div>
-          <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-            <button onClick={() => { setTela('home'); setPastaAtual(null); }} className="flex items-center gap-2 text-gray-600 hover:text-gray-800 mb-4">
-              <ArrowLeft className="w-5 h-5" />Voltar
-            </button>
-            <h1 className="text-3xl font-bold text-gray-800">{pasta?.nome}</h1>
-            <p className="text-gray-600 mt-2">{pasta?.etiquetas.length} {pasta?.etiquetas.length === 1 ? 'etiqueta' : 'etiquetas'}</p>
-          </div>
-          <div className="space-y-3">
+
+          <div style={{display:'flex', flexDirection:'column', gap:'10px'}}>
             {pasta?.etiquetas.map(etiqueta => {
               const { dataFabricacao, dataValidade } = calcularDatasFrescas(etiqueta.diasValidade);
               return (
-                <div key={etiqueta.id} className="bg-white rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow">
-                  <div className="flex items-center justify-between">
-                    <div className="flex-1">
-                      <h3 className="text-lg font-bold text-gray-800">{etiqueta.produto}</h3>
-                      <p className="text-sm text-green-600 font-semibold mt-1">📅 Validade: {etiqueta.diasValidade} {etiqueta.diasValidade === 1 ? 'dia' : 'dias'}</p>
-                      <p className="text-xs text-gray-500 mt-1">Se imprimir agora: Fab {formatarData(dataFabricacao)} → Val {formatarData(dataValidade)}</p>
-                    </div>
-                    <div className="flex gap-2">
-                      <button onClick={() => imprimirEtiqueta(etiqueta)} className="bg-blue-600 active:bg-blue-800 text-white font-semibold py-3 px-4 rounded flex items-center gap-2" style={{touchAction:'manipulation'}}>
-                        <Printer className="w-4 h-4" />Imprimir
-                      </button>
-                      <button onClick={() => excluirEtiqueta(pasta.id, etiqueta.id)} className="bg-red-600 active:bg-red-800 text-white font-semibold py-3 px-4 rounded" style={{touchAction:'manipulation'}}>
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </div>
+                <div key={etiqueta.id} style={{background:'white', borderRadius:'12px', padding:'16px', boxShadow:'0 2px 8px rgba(0,0,0,0.1)', display:'flex', alignItems:'center', justifyContent:'space-between', gap:'12px'}}>
+                  <div style={{flex:1}}>
+                    <h3 style={{fontSize:'17px', fontWeight:'bold', color:'#1f2937', margin:'0 0 4px 0'}}>{etiqueta.produto}</h3>
+                    <p style={{fontSize:'12px', color:'#16a34a', fontWeight:'600', margin:'0 0 2px 0'}}>⏱️ {etiqueta.diasValidade} {etiqueta.diasValidade === 1 ? 'dia' : 'dias'} de validade</p>
+                    <p style={{fontSize:'11px', color:'#9ca3af', margin:0}}>Agora: Fab {fmt(dataFabricacao)} → Val {fmt(dataValidade)}</p>
+                  </div>
+                  <div style={{display:'flex', gap:'8px', flexShrink:0}}>
+                    <button onClick={() => imprimirEtiqueta(etiqueta)} style={{padding:'10px 14px', background:'#2563eb', color:'white', border:'none', borderRadius:'8px', fontWeight:'600', cursor:'pointer', fontSize:'13px'}}>
+                      🖨️ Imprimir
+                    </button>
+                    <button onClick={() => excluirEtiqueta(pasta.id, etiqueta.id)} style={{padding:'10px 12px', background:'#dc2626', color:'white', border:'none', borderRadius:'8px', cursor:'pointer', fontSize:'13px'}}>
+                      🗑️
+                    </button>
                   </div>
                 </div>
               );
             })}
           </div>
+
           {pasta?.etiquetas.length === 0 && (
-            <div className="text-center py-12 text-gray-500 bg-white rounded-lg shadow-md">
-              <p className="text-lg">Nenhuma etiqueta criada ainda</p>
+            <div style={{textAlign:'center', padding:'48px', color:'#9ca3af', background:'white', borderRadius:'12px'}}>
+              <p style={{fontSize:'18px'}}>Nenhuma etiqueta ainda</p>
+              <p style={{fontSize:'14px'}}>Volte e clique em "Criar Etiqueta"</p>
             </div>
           )}
         </div>
       </div>
     );
   }
+
+  return null;
 }
 
-ReactDOM.render(<App />, document.getElementById('root'));
-    </script>
+ReactDOM.render(React.createElement(App), document.getElementById('root'));
+</script>
 </body>
 </html>
