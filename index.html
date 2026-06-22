@@ -12,7 +12,9 @@
 <body>
     <div id="root"></div>
     <script type="text/babel">
-        const { useState, useEffect } = React;
+
+
+const { useState, useEffect } = React;
 
 // Ícones SVG
 const Folder = ({className}) => <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" /></svg>;
@@ -41,6 +43,8 @@ function App() {
   const [loginForm, setLoginForm] = useState({ restaurante: '', usuario: '', senha: '' });
   const [cadastroForm, setCadastroForm] = useState({ restaurante: '', senha: '' });
   const [formulario, setFormulario] = useState({ produto: '', diasValidade: '3', sif: '', pasta: '' });
+
+
 useEffect(() => {
     try {
       const usuarioSalvo = localStorage.getItem('usuarioLogado');
@@ -84,7 +88,9 @@ useEffect(() => {
       setPastas([]);
     }
   };
-  const fazerCadastro = () => {
+
+
+const fazerCadastro = () => {
     if (!cadastroForm.restaurante || !cadastroForm.senha) {
       alert('Preencha todos os campos');
       return;
@@ -149,7 +155,10 @@ useEffect(() => {
     setModoLogin('login');
     setTela('login');
   };
-  const toggleFullscreen = () => {
+
+
+
+const toggleFullscreen = () => {
     const elem = document.documentElement;
     if (!document.fullscreenElement) {
       if (elem.requestFullscreen) {
@@ -200,7 +209,10 @@ useEffect(() => {
     const [ano, mes, dia] = data.split('-');
     return `${dia}/${mes}/${ano}`;
   };
-  const adicionarPasta = () => {
+
+
+
+const adicionarPasta = () => {
     if (nomePasta && nomePasta.trim()) {
       const novaPasta = { id: Date.now(), nome: nomePasta.trim(), etiquetas: [] };
       setPastas([...pastas, novaPasta].sort((a, b) => a.nome.localeCompare(b.nome)));
@@ -267,7 +279,10 @@ useEffect(() => {
       }
     }
   };
-  const abrirModalImpressoras = async () => {
+
+
+
+const abrirModalImpressoras = async () => {
     alert('Verificando Bluetooth...');
     if (!navigator.bluetooth) {
       alert('❌ Bluetooth não disponível. Use Chrome e HTTPS!');
@@ -362,6 +377,9 @@ useEffect(() => {
     w.document.close();
     setTimeout(() => { w.print(); w.close(); }, 250);
   };
+
+
+
 // Renderização da Interface
   if (tela === 'login') {
     return (
@@ -409,6 +427,9 @@ useEffect(() => {
       </div>
     );
   }
+
+
+
 if (tela === 'home') {
     return (
       <div className="min-h-screen bg-gray-100 p-6">
@@ -479,6 +500,9 @@ if (tela === 'home') {
       </div>
     );
   }
+
+
+
 if (tela === 'criar') {
     return (
       <div className="min-h-screen bg-gray-100 p-6">
@@ -524,6 +548,9 @@ if (tela === 'criar') {
       </div>
     );
   }
+
+
+
 if (tela === 'pasta') {
     const pasta = pastas.find(p => p.id === pastaAtual);
     return (
