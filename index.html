@@ -12,7 +12,7 @@
 <body>
     <div id="root"></div>
     <script type="text/babel">
-const { useState, useEffect } = React;
+        const { useState, useEffect } = React;
 
 // Ícones SVG
 const Folder = ({className}) => <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" /></svg>;
@@ -41,8 +41,7 @@ function App() {
   const [loginForm, setLoginForm] = useState({ restaurante: '', usuario: '', senha: '' });
   const [cadastroForm, setCadastroForm] = useState({ restaurante: '', senha: '' });
   const [formulario, setFormulario] = useState({ produto: '', diasValidade: '3', sif: '', pasta: '' });
-
-  useEffect(() => {
+useEffect(() => {
     try {
       const usuarioSalvo = localStorage.getItem('usuarioLogado');
       if (usuarioSalvo) {
@@ -85,7 +84,6 @@ function App() {
       setPastas([]);
     }
   };
-
 const fazerCadastro = () => {
     if (!cadastroForm.restaurante || !cadastroForm.senha) {
       alert('Preencha todos os campos');
@@ -151,8 +149,7 @@ const fazerCadastro = () => {
     setModoLogin('login');
     setTela('login');
   };
-
-  const toggleFullscreen = () => {
+const toggleFullscreen = () => {
     const elem = document.documentElement;
     if (!document.fullscreenElement) {
       if (elem.requestFullscreen) {
@@ -203,8 +200,7 @@ const fazerCadastro = () => {
     const [ano, mes, dia] = data.split('-');
     return `${dia}/${mes}/${ano}`;
   };
-
-  const adicionarPasta = () => {
+const adicionarPasta = () => {
     if (nomePasta && nomePasta.trim()) {
       const novaPasta = { id: Date.now(), nome: nomePasta.trim(), etiquetas: [] };
       setPastas([...pastas, novaPasta].sort((a, b) => a.nome.localeCompare(b.nome)));
@@ -271,8 +267,7 @@ const fazerCadastro = () => {
       }
     }
   };
-
-  const abrirModalImpressoras = async () => {
+const abrirModalImpressoras = async () => {
     alert('Verificando Bluetooth...');
     if (!navigator.bluetooth) {
       alert('❌ Bluetooth não disponível. Use Chrome e HTTPS!');
@@ -285,10 +280,7 @@ const fazerCadastro = () => {
         optionalServices: [
           '000018f0-0000-1000-8000-00805f9b34fb',
           'e7810a71-73ae-499d-8c15-faa9aef0c3f2',
-          '49535343-fe7d-4ae5-8fa9-9fafd205e455',
-          '00001101-0000-1000-8000-00805f9b34fb',
-          '0000ff00-0000-1000-8000-00805f9b34fb',
-          '0000ffe0-0000-1000-8000-00805f9b34fb'
+          '00001101-0000-1000-8000-00805f9b34fb'
         ]
       });
       alert('Dispositivo: ' + (device.name || 'Sem nome'));
@@ -323,63 +315,6 @@ const fazerCadastro = () => {
     alert('Desconectado!');
   };
 
-  const diagnosticarImpressora = async () => {
-    try {
-      let server = impressoraConectada.server;
-      if (!impressoraConectada.device.gatt.connected) {
-        server = await impressoraConectada.device.gatt.connect();
-      }
-
-      const services = await server.getPrimaryServices();
-      let relatorio = `📋 DIAGNÓSTICO\n\nServiços encontrados: ${services.length}\n\n`;
-
-      for (const service of services) {
-        relatorio += `🔷 Serviço:\n${service.uuid}\n`;
-        try {
-          const chars = await service.getCharacteristics();
-          for (const char of chars) {
-            const props = [];
-            if (char.properties.read) props.push('READ');
-            if (char.properties.write) props.push('WRITE');
-            if (char.properties.writeWithoutResponse) props.push('WRITE_WR');
-            if (char.properties.notify) props.push('NOTIFY');
-            relatorio += `  ➡ ${char.uuid}\n     [${props.join(', ')}]\n`;
-          }
-        } catch (e) {
-          relatorio += `  ⚠ Erro: ${e.message}\n`;
-        }
-        relatorio += '\n';
-      }
-
-      // Tenta enviar bytes mínimos de teste
-      relatorio += '🖨 Teste de envio...\n';
-      try {
-        const services2 = await server.getPrimaryServices();
-        for (const service of services2) {
-          const chars = await service.getCharacteristics();
-          for (const char of chars) {
-            if (char.properties.write || char.properties.writeWithoutResponse) {
-              const testBytes = new Uint8Array([0x1B, 0x40, 0x41, 0x0A]); // ESC @ A \n
-              if (char.properties.writeWithoutResponse) {
-                await char.writeValueWithoutResponse(testBytes);
-              } else {
-                await char.writeValue(testBytes);
-              }
-              relatorio += `✅ Enviado via: ${char.uuid}`;
-              break;
-            }
-          }
-        }
-      } catch (e) {
-        relatorio += `❌ Falha no envio: ${e.message}`;
-      }
-
-      alert(relatorio);
-    } catch (e) {
-      alert('❌ Erro geral: ' + e.message);
-    }
-  };
-    
   const imprimirEtiqueta = async (etiqueta) => {
     const { dataFabricacao, dataValidade, horaFabricacao } = calcularDatasFrescas(etiqueta.diasValidade);
     const etiquetaAtualizada = { ...etiqueta, dataFabricacao, dataValidade, horaFabricacao };
@@ -396,74 +331,26 @@ const fazerCadastro = () => {
         imprimirViaWeb(etiqueta);
         return;
       }
-
-      // Reconecta se necessário
-      let server = impressoraConectada.server;
-      if (!impressoraConectada.device.gatt.connected) {
-        server = await impressoraConectada.device.gatt.connect();
+      const server = impressoraConectada.server;
+      let service;
+      try {
+        service = await server.getPrimaryService('000018f0-0000-1000-8000-00805f9b34fb');
+      } catch {
+        service = await server.getPrimaryService('e7810a71-73ae-499d-8c15-faa9aef0c3f2');
       }
-
-      // Descobre todos os serviços disponíveis
-      const services = await server.getPrimaryServices();
-      let writeChar = null;
-
-      for (const service of services) {
-        try {
-          const chars = await service.getCharacteristics();
-          for (const char of chars) {
-            if (char.properties.write || char.properties.writeWithoutResponse) {
-              writeChar = char;
-              break;
-            }
-          }
-          if (writeChar) break;
-        } catch (e) {}
-      }
-
-      if (!writeChar) {
-        alert('❌ Característica de escrita não encontrada');
-        imprimirViaWeb(etiqueta);
-        return;
-      }
-
-      // Monta o comando ESC/POS
-      const ESC = '\x1B';
-      const GS  = '\x1D';
-      let cmd = '';
-      cmd += ESC + '@';                    // Reset
-      cmd += ESC + 'a' + '\x01';          // Centralizar
-      cmd += ESC + '!' + '\x30';          // Fonte grande
-      cmd += etiqueta.produto + '\n';
-      cmd += ESC + '!' + '\x00';          // Fonte normal
-      cmd += ESC + 'a' + '\x00';          // Alinhar esquerda
-      cmd += '------------------------\n';
+      const characteristic = await service.getCharacteristics();
+      const writeChar = characteristic.find(c => c.properties.write || c.properties.writeWithoutResponse);
+      if (!writeChar) throw new Error('Não encontrado');
+      const encoder = new TextEncoder();
+      let cmd = '\x1B\x40\x1B\x61\x01\x1B\x21\x30' + etiqueta.produto + '\n\n\x1B\x21\x00\x1B\x61\x00';
       cmd += 'Fab: ' + formatarData(etiqueta.dataFabricacao) + ' ' + etiqueta.horaFabricacao + '\n';
       cmd += 'Val: ' + formatarData(etiqueta.dataValidade) + '\n';
       cmd += 'Resp: ' + etiqueta.responsavel + '\n';
       if (etiqueta.sif) cmd += 'SIF: ' + etiqueta.sif + '\n';
-      cmd += '\n\n\n';
-      cmd += GS + 'V' + '\x00';           // Cortar papel
-
-      // Converte para bytes
-      const encoder = new TextEncoder();
-      const data = encoder.encode(cmd);
-
-      // Envia em chunks de 20 bytes
-      const CHUNK_SIZE = 20;
-      for (let i = 0; i < data.length; i += CHUNK_SIZE) {
-        const chunk = data.slice(i, i + CHUNK_SIZE);
-        if (writeChar.properties.writeWithoutResponse) {
-          await writeChar.writeValueWithoutResponse(chunk);
-        } else {
-          await writeChar.writeValue(chunk);
-        }
-        // Pequena pausa entre chunks
-        await new Promise(r => setTimeout(r, 30));
-      }
-
-      alert('✅ Impressão enviada!');
+      cmd += '\n\n\x1D\x56\x00';
+      await writeChar.writeValue(encoder.encode(cmd));
+      alert('✓ Enviado!');
     } catch (error) {
-      alert('❌ Erro: ' + error.message);
       setStatusImpressora('offline');
       imprimirViaWeb(etiqueta);
     }
@@ -475,8 +362,7 @@ const fazerCadastro = () => {
     w.document.close();
     setTimeout(() => { w.print(); w.close(); }, 250);
   };
-
-  // Renderização da Interface
+// Renderização da Interface
   if (tela === 'login') {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center p-6">
@@ -523,8 +409,7 @@ const fazerCadastro = () => {
       </div>
     );
   }
-
-  if (tela === 'home') {
+if (tela === 'home') {
     return (
       <div className="min-h-screen bg-gray-100 p-6">
         <div className="max-w-4xl mx-auto">
@@ -551,7 +436,6 @@ const fazerCadastro = () => {
               <div className="flex gap-2 flex-wrap">
                 <button onClick={abrirModalImpressoras} className="bg-blue-600 active:bg-blue-800 text-white font-bold py-3 px-5 rounded flex items-center gap-2"><Wifi className="w-5 h-5" />{impressoraConectada ? 'TROCAR' : 'CONECTAR'}</button>
                 {impressoraConectada && <button onClick={desconectarImpressora} className="bg-orange-600 active:bg-orange-800 text-white font-bold py-3 px-5 rounded flex items-center gap-2"><Wifi className="w-5 h-5" />Desconectar</button>}
-                {impressoraConectada && (<button onClick={diagnosticarImpressora} className="bg-yellow-600 active:bg-yellow-800 text-white font-bold py-3 px-5 rounded flex items-center gap-2">🔍 Diagnosticar</button>)}
                 <button onClick={fazerLogout} className="bg-red-600 active:bg-red-800 text-white font-bold py-3 px-5 rounded flex items-center gap-2"><LogOut className="w-5 h-5" />Sair</button>
               </div>
             </div>
@@ -595,18 +479,56 @@ const fazerCadastro = () => {
       </div>
     );
   }
-
- if (tela === 'pasta') {
+if (tela === 'criar') {
+    return (
+      <div className="min-h-screen bg-gray-100 p-6">
+        <div className="max-w-2xl mx-auto">
+          <div className="bg-white rounded-lg shadow-md p-6">
+            <button onClick={() => setTela('home')} className="flex items-center gap-2 text-gray-600 hover:text-gray-800 mb-4">
+              <ArrowLeft className="w-5 h-5" />Voltar
+            </button>
+            <h1 className="text-3xl font-bold text-gray-800 mb-2">Criar Etiqueta</h1>
+            <p className="text-gray-600 mb-6">Responsável: <strong>{usuarioLogado?.nome}</strong></p>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Pasta *</label>
+                <select value={formulario.pasta} onChange={(e) => setFormulario({...formulario, pasta: e.target.value})} className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-green-500 focus:outline-none">
+                  <option value="">Selecione uma pasta</option>
+                  {pastas.map(pasta => (
+                    <option key={pasta.id} value={pasta.id}>{pasta.nome}</option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Nome do Produto *</label>
+                <input type="text" value={formulario.produto} onChange={(e) => setFormulario({...formulario, produto: e.target.value})} className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-green-500 focus:outline-none" placeholder="Ex: Frango Grelhado" />
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Dias de Validade *</label>
+                <input type="number" value={formulario.diasValidade} onChange={(e) => setFormulario({...formulario, diasValidade: e.target.value})} className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-green-500 focus:outline-none" min="1" placeholder="Ex: 3" />
+                <p className="text-sm text-blue-600 mt-1">💡 A etiqueta sempre usará a data atual ao imprimir</p>
+                <p className="text-sm text-green-600 mt-1 font-semibold">
+                  Se imprimir hoje: Fab {formatarData(calcularDatasFrescas(formulario.diasValidade || '3').dataFabricacao)} → Val {formatarData(calcularDatasFrescas(formulario.diasValidade || '3').dataValidade)}
+                </p>
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">SIF</label>
+                <input type="text" value={formulario.sif} onChange={(e) => setFormulario({...formulario, sif: e.target.value})} className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-green-500 focus:outline-none" placeholder="Ex: SIF 1234" />
+              </div>
+              <button onClick={adicionarEtiqueta} className="w-full bg-green-600 active:bg-green-800 text-white font-bold py-4 px-6 rounded-lg flex items-center justify-center gap-2">
+                <Plus className="w-5 h-5" />Criar Etiqueta
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+if (tela === 'pasta') {
     const pasta = pastas.find(p => p.id === pastaAtual);
-    if (!pasta) { setTela('home'); return null; }
     return (
       <div className="min-h-screen bg-gray-100 p-6">
         <div className="max-w-4xl mx-auto">
-          <div className="fixed top-4 left-4 z-50">
-            <button onClick={toggleFullscreen} className="bg-gray-800 hover:bg-gray-900 text-white p-3 rounded-lg shadow-lg">
-              {isFullscreen ? <Minimize className="w-6 h-6" /> : <Maximize className="w-6 h-6" />}
-            </button>
-          </div>
           <div className="fixed bottom-6 right-6 z-50">
             <div className={`rounded-lg shadow-2xl p-4 ${statusImpressora === 'online' ? 'bg-green-600' : statusImpressora === 'conectando' ? 'bg-yellow-600' : 'bg-red-600'}`}>
               <div className="flex items-center gap-3 text-white">
@@ -617,140 +539,48 @@ const fazerCadastro = () => {
             </div>
           </div>
           <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-            <div className="flex items-center gap-4 mb-4">
-              <button onClick={() => { setTela('home'); setPastaAtual(null); }} className="bg-gray-200 hover:bg-gray-300 p-2 rounded-lg">
-                <ArrowLeft className="w-6 h-6" />
-              </button>
-              <div>
-                <h1 className="text-3xl font-bold text-gray-800">{pasta.nome}</h1>
-                <p className="text-gray-500 text-sm">{pasta.etiquetas.length} {pasta.etiquetas.length === 1 ? 'etiqueta' : 'etiquetas'}</p>
-              </div>
-            </div>
-            <button onClick={() => setTela('criar')} className="bg-green-600 active:bg-green-800 text-white font-semibold py-3 px-5 rounded flex items-center gap-2">
-              <Plus className="w-5 h-5" />Criar Etiqueta
+            <button onClick={() => { setTela('home'); setPastaAtual(null); }} className="flex items-center gap-2 text-gray-600 hover:text-gray-800 mb-4">
+              <ArrowLeft className="w-5 h-5" />Voltar
             </button>
+            <h1 className="text-3xl font-bold text-gray-800">{pasta?.nome}</h1>
+            <p className="text-gray-600 mt-2">{pasta?.etiquetas.length} {pasta?.etiquetas.length === 1 ? 'etiqueta' : 'etiquetas'}</p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {pasta.etiquetas.map(etiqueta => {
-              const { dataFabricacao, dataValidade, horaFabricacao } = calcularDatasFrescas(etiqueta.diasValidade);
+          <div className="space-y-3">
+            {pasta?.etiquetas.map(etiqueta => {
+              const { dataFabricacao, dataValidade } = calcularDatasFrescas(etiqueta.diasValidade);
               return (
-                <div key={etiqueta.id} className="bg-white rounded-lg shadow-md p-5 relative">
-                  <button onClick={() => excluirEtiqueta(pasta.id, etiqueta.id)} className="absolute top-3 right-3 text-red-400 hover:text-red-600">
-                    <Trash2 className="w-4 h-4" />
-                  </button>
-                  <h2 className="text-xl font-bold text-gray-800 mb-3 pr-6">{etiqueta.produto}</h2>
-                  <div className="text-sm text-gray-600 space-y-1 mb-4">
-                    <p><span className="font-semibold">Fab:</span> {formatarData(dataFabricacao)} {horaFabricacao}</p>
-                    <p><span className="font-semibold">Val:</span> {formatarData(dataValidade)} <span className="text-gray-400">({etiqueta.diasValidade}d)</span></p>
-                    <p><span className="font-semibold">Resp:</span> {etiqueta.responsavel}</p>
-                    {etiqueta.sif && <p><span className="font-semibold">SIF:</span> {etiqueta.sif}</p>}
+                <div key={etiqueta.id} className="bg-white rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow">
+                  <div className="flex items-center justify-between">
+                    <div className="flex-1">
+                      <h3 className="text-lg font-bold text-gray-800">{etiqueta.produto}</h3>
+                      <p className="text-sm text-green-600 font-semibold mt-1">📅 Validade: {etiqueta.diasValidade} {etiqueta.diasValidade === 1 ? 'dia' : 'dias'}</p>
+                      <p className="text-xs text-gray-500 mt-1">Se imprimir agora: Fab {formatarData(dataFabricacao)} → Val {formatarData(dataValidade)}</p>
+                    </div>
+                    <div className="flex gap-2">
+                      <button onClick={() => imprimirEtiqueta(etiqueta)} className="bg-blue-600 active:bg-blue-800 text-white font-semibold py-3 px-4 rounded flex items-center gap-2" style={{touchAction:'manipulation'}}>
+                        <Printer className="w-4 h-4" />Imprimir
+                      </button>
+                      <button onClick={() => excluirEtiqueta(pasta.id, etiqueta.id)} className="bg-red-600 active:bg-red-800 text-white font-semibold py-3 px-4 rounded" style={{touchAction:'manipulation'}}>
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
                   </div>
-                  <button onClick={() => imprimirEtiqueta(etiqueta)} className="w-full bg-blue-600 active:bg-blue-800 text-white font-bold py-3 rounded flex items-center justify-center gap-2">
-                    <Printer className="w-5 h-5" />Imprimir Agora
-                  </button>
                 </div>
               );
             })}
           </div>
-          {pasta.etiquetas.length === 0 && (
-            <div className="text-center py-12 text-gray-500">
-              <Printer className="w-16 h-16 mx-auto mb-4 opacity-50" />
-              <p className="text-lg">Nenhuma etiqueta nesta pasta</p>
-              <p className="text-sm">Clique em "Criar Etiqueta" para adicionar</p>
+          {pasta?.etiquetas.length === 0 && (
+            <div className="text-center py-12 text-gray-500 bg-white rounded-lg shadow-md">
+              <p className="text-lg">Nenhuma etiqueta criada ainda</p>
             </div>
           )}
         </div>
       </div>
     );
   }
-
-  if (tela === 'criar') {
-    return (
-      <div className="min-h-screen bg-gray-100 p-6">
-        <div className="max-w-lg mx-auto">
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <div className="flex items-center gap-4 mb-6">
-              <button onClick={() => setTela(pastaAtual ? 'pasta' : 'home')} className="bg-gray-200 hover:bg-gray-300 p-2 rounded-lg">
-                <ArrowLeft className="w-6 h-6" />
-              </button>
-              <h1 className="text-2xl font-bold text-gray-800">Criar Etiqueta</h1>
-            </div>
-            <div className="space-y-5">
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Produto *</label>
-                <input
-                  type="text"
-                  value={formulario.produto}
-                  onChange={(e) => setFormulario({...formulario, produto: e.target.value})}
-                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-green-500 focus:outline-none text-lg"
-                  placeholder="Ex: Molho de Tomate"
-                  autoFocus
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Validade (dias) *</label>
-                <input
-                  type="number"
-                  value={formulario.diasValidade}
-                  onChange={(e) => setFormulario({...formulario, diasValidade: e.target.value})}
-                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-green-500 focus:outline-none text-lg"
-                  min="1"
-                  max="365"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Pasta *</label>
-                <select
-                  value={formulario.pasta}
-                  onChange={(e) => setFormulario({...formulario, pasta: e.target.value})}
-                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-green-500 focus:outline-none text-lg bg-white"
-                >
-                  <option value="">Selecione uma pasta...</option>
-                  {pastas.map(p => (
-                    <option key={p.id} value={p.id}>{p.nome}</option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">SIF (opcional)</label>
-                <input
-                  type="text"
-                  value={formulario.sif}
-                  onChange={(e) => setFormulario({...formulario, sif: e.target.value})}
-                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-green-500 focus:outline-none text-lg"
-                  placeholder="Número do SIF"
-                />
-              </div>
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-sm text-blue-700">
-                <p className="font-semibold mb-1">ℹ️ Sobre as datas</p>
-                <p>A data de fabricação e validade são calculadas automaticamente no momento da impressão, sempre com a hora atual.</p>
-              </div>
-              <div className="flex gap-3 pt-2">
-                <button
-                  onClick={() => setTela(pastaAtual ? 'pasta' : 'home')}
-                  className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-3 rounded-lg"
-                >
-                  Cancelar
-                </button>
-                <button
-                  onClick={adicionarEtiqueta}
-                  className="flex-1 bg-green-600 active:bg-green-800 text-white font-bold py-3 rounded-lg flex items-center justify-center gap-2"
-                >
-                  <Plus className="w-5 h-5" />Salvar
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  return null;
 }
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(<App />);
+ReactDOM.render(<App />, document.getElementById('root'));
     </script>
 </body>
 </html>
